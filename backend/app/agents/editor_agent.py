@@ -34,7 +34,7 @@ class EditorAgent:
             "-b:a", "192k",
             str(output_path)
         ]
-        subprocess.run(cmd, capture_output=True, timeout=120)
+        subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, timeout=120)
         return output_path
 
     @staticmethod
@@ -70,7 +70,7 @@ class EditorAgent:
             "-c", "copy",
             str(raw_video)
         ]
-        subprocess.run(cmd_concat, capture_output=True, timeout=180)
+        subprocess.run(cmd_concat, stdin=subprocess.DEVNULL, capture_output=True, timeout=180)
 
         # 3. Determine video duration using ffprobe
         dur_cmd = [
@@ -79,7 +79,7 @@ class EditorAgent:
             "-of", "default=noprint_wrappers=1:nokey=1",
             str(raw_video)
         ]
-        res = subprocess.run(dur_cmd, capture_output=True, text=True)
+        res = subprocess.run(dur_cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True)
         duration = float(res.stdout.strip() or 180.0)
 
         # 4. Generate ambient music score matching exact duration
@@ -108,7 +108,7 @@ class EditorAgent:
             str(final_mp4)
         ]
         
-        proc = subprocess.run(cmd_final, capture_output=True, text=True, timeout=300)
+        proc = subprocess.run(cmd_final, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=300)
         if proc.returncode != 0 or not final_mp4.exists():
             # If complex filter encountered issue with audio, fallback to direct audio copy
             cmd_fallback = [
@@ -122,7 +122,7 @@ class EditorAgent:
                 "-shortest",
                 str(final_mp4)
             ]
-            subprocess.run(cmd_fallback, capture_output=True, timeout=120)
+            subprocess.run(cmd_fallback, stdin=subprocess.DEVNULL, capture_output=True, timeout=120)
 
         # 6. Set up instant streaming preview (fast copy of faststart master)
         try:
@@ -137,6 +137,6 @@ class EditorAgent:
                 "-movflags", "+faststart",
                 str(preview_mp4)
             ]
-            subprocess.run(cmd_prev, capture_output=True, timeout=60)
+            subprocess.run(cmd_prev, stdin=subprocess.DEVNULL, capture_output=True, timeout=60)
 
         return final_mp4, preview_mp4

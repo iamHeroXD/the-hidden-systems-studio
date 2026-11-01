@@ -49,6 +49,8 @@ def slugify(text: str) -> str:
     return re.sub(r'[-\s]+', '-', cleaned)[:45].strip('-')
 
 class ProductionOrchestrator:
+    active_production_id: Optional[str] = None
+
     @staticmethod
     def create_project(topic_override: Optional[str] = None) -> ProductionProject:
         primary_topic, _, _ = TopicIntelligenceEngine.discover_and_evaluate_topics(manual_override=topic_override)
@@ -381,6 +383,7 @@ class ProductionOrchestrator:
         isolated background thread with its own event loop.
         This guarantees FastAPI's main asyncio loop remains 100% responsive for live polling.
         """
+        ProductionOrchestrator.active_production_id = production_id
         import threading
         
         def _worker():
@@ -392,6 +395,8 @@ class ProductionOrchestrator:
             except Exception as e:
                 print(f"Background pipeline execution error for {production_id}: {e}")
             finally:
+                if ProductionOrchestrator.active_production_id == production_id:
+                    ProductionOrchestrator.active_production_id = None
                 try:
                     loop.close()
                 except Exception:

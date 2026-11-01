@@ -50,13 +50,14 @@ class ViewerAgent:
             sample_img = frames_dir / f"sample_{tag}.jpg"
             cmd = [
                 "ffmpeg", "-y",
+                "-nostats", "-loglevel", "error",
                 "-ss", f"{sample_time:.2f}",
                 "-i", str(video_path),
                 "-frames:v", "1",
                 "-q:v", "2",
                 str(sample_img)
             ]
-            subprocess.run(cmd, capture_output=True, timeout=15)
+            subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, timeout=15)
 
         # Compute Review Scores (Scale 0-100)
         total_scenes = len(scenes)

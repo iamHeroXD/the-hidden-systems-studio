@@ -38,6 +38,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+def startup_cleanup_orphans():
+    try:
+        from backend.app.database import get_connection
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("UPDATE productions SET status = 'interrupted' WHERE status = 'running'")
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
+
 # Static file serving for generated media assets
 app.mount("/media", StaticFiles(directory=str(OUTPUT_ROOT)), name="media")
 
@@ -102,21 +114,33 @@ def get_live_progress():
     prods = get_all_productions()
     if not prods:
         return {"status": "idle", "progress_pct": 0, "eta_sec": 0, "elapsed_sec": 0, "stage": "Standby"}
-    running = next((p for p in prods if p.get("status") == "running"), None)
-    if not running:
-        running = next((p for p in prods if p.get("status") in ["awaiting_approval", "completed"]), prods[0])
-    live = running.get("live_progress") or {}
+    
+    # 1. Target active background thread if currently running
+    active_id = getattr(ProductionOrchestrator, "active_production_id", None)
+    target = None
+    if active_id:
+        target = next((p for p in prods if p.get("id") == active_id), None)
+        
+    # 2. Or most recent production that is marked running
+    if not target:
+        target = next((p for p in prods if p.get("status") == "running"), None)
+        
+    # 3. Or most recent production overall
+    if not target:
+        target = next((p for p in prods if p.get("status") in ["awaiting_approval", "completed"]), prods[0])
+        
+    live = target.get("live_progress") or {}
     return {
-        "id": running.get("id"),
-        "title": running.get("topic_title"),
-        "status": running.get("status"),
-        "progress_pct": running.get("progress_pct", 0),
-        "stage_index": running.get("current_stage_index", 0),
-        "total_stages": len(running.get("stages", [])),
-        "elapsed_sec": running.get("elapsed_sec", 0),
-        "eta_sec": running.get("eta_sec", 0),
+        "id": target.get("id"),
+        "title": target.get("topic_title"),
+        "status": target.get("status"),
+        "progress_pct": target.get("progress_pct", 0),
+        "stage_index": target.get("current_stage_index", 0),
+        "total_stages": len(target.get("stages", [])),
+        "elapsed_sec": target.get("elapsed_sec", 0),
+        "eta_sec": target.get("eta_sec", 0),
         "live": live,
-        "stages": running.get("stages", [])
+        "stages": target.get("stages", [])
     }
 
 @app.get("/api/productions")

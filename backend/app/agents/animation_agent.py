@@ -145,7 +145,7 @@ export default makeScene2D(function* (view) {
             "-i", str(render_input),
             "-vf", (
                 f"{vf},"
-                f"noise=alls=8:allf=t+u,"
+                f"noise=alls=3:allf=t+u,"
                 f"drawbox=x=0:y='mod(t*220,ih)':w=iw:h=2:color=0xEF4444@0.6:t=fill,"
                 f"drawbox=x='mod(t*650,iw)':y='ih/2':w=32:h=5:color=0x06B6D4@0.85:t=fill,"
                 f"eq=contrast=1.06:brightness=0.01:saturation=1.12,format=yuv420p"
@@ -153,13 +153,13 @@ export default makeScene2D(function* (view) {
             "-t", f"{dur:.2f}",
             "-r", str(settings.video_fps),
             "-c:v", "libx264",
-            "-preset", "ultrafast",
+            "-preset", "veryfast",
             "-crf", "23",
             "-pix_fmt", "yuv420p",
             str(output_mp4)
         ]
 
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        res = subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=120)
         if res.returncode != 0:
             raise RuntimeError(f"FFmpeg scene render failed: {res.stderr[:400]}")
 
