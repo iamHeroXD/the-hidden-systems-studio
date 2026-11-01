@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+.next/
+out/
+build/
+dist/
+
+# Large Generated Media & Video Binaries (GitHub 100MB limit)
+*.mp4
+*.zip
+*.tar.gz
+*.avi
+*.mov
+*.mkv
+THE_HIDDEN_SYSTEMS/**/video/
+THE_HIDDEN_SYSTEMS/**/animation/rendered_scenes/
+THE_HIDDEN_SYSTEMS/**/*.zip
+
+# Database WAL files & local state
+*.db-wal
+*.db-shm
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# Sensitive credentials
+.env
+.env.local

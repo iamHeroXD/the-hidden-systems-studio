@@ -1,0 +1,906 @@
+[
+  {
+    "scene_id": 1,
+    "act_number": 1,
+    "narration_chunk": "Right now, as you listen to my voice, roughly four billion pulses of light are rocketing through strands of glass beneath the Atlantic Ocean. Every credit card swipe, every flight path, every automated pacemaker update is riding on an invisible lattice of protocols written in the 1980s.",
+    "duration_sec": 12.0,
+    "characters": [
+      "The Investigator"
+    ],
+    "objects": [
+      "Undersea fiber optic cable",
+      "Glass core cross-section",
+      "BGP core router"
+    ],
+    "background_type": "Abyssal Pacific ocean floor with glowing blue fiber strands",
+    "animation_instructions": "Pulsing photons traveling through glass, suddenly stuttering and going dark.",
+    "camera_movement": "Slow cinematic pan right across cable lines",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Subsea ocean rumble, laser optical hum",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 2,
+    "act_number": 1,
+    "narration_chunk": "We treat the internet like the weather: a permanent, atmospheric fact of nature. But it isn't nature.",
+    "duration_sec": 7.1,
+    "characters": [],
+    "objects": [
+      "Undersea fiber optic cable",
+      "Glass core cross-section",
+      "BGP core router"
+    ],
+    "background_type": "Abyssal Pacific ocean floor with glowing blue fiber strands",
+    "animation_instructions": "Pulsing photons traveling through glass, suddenly stuttering and going dark.",
+    "camera_movement": "Dynamic push-in on optical fiber core",
+    "transitions": "Crossfade",
+    "sound_design": "Subtle static crackle, digital packet beep",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 3,
+    "act_number": 1,
+    "narration_chunk": "It is glass, copper, electricity, and a handful of routing tables that we trust with civilization. Now imagine it is midnight UTC.",
+    "duration_sec": 9.2,
+    "characters": [],
+    "objects": [
+      "Undersea fiber optic cable",
+      "Glass core cross-section",
+      "BGP core router"
+    ],
+    "background_type": "Abyssal Pacific ocean floor with glowing blue fiber strands",
+    "animation_instructions": "Pulsing photons traveling through glass, suddenly stuttering and going dark.",
+    "camera_movement": "Parallax drift upward revealing radio tower",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Card swipe chime, sharp buzzer error tone",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 4,
+    "act_number": 1,
+    "narration_chunk": "Somewhere in the deep Pacific, an anomaly cascades. Within ninety seconds, the Border Gateway Protocol keepalive timers across twelve thousand autonomous systems hit zero.",
+    "duration_sec": 10.0,
+    "characters": [],
+    "objects": [
+      "Undersea fiber optic cable",
+      "Glass core cross-section",
+      "BGP core router"
+    ],
+    "background_type": "Abyssal Pacific ocean floor with glowing blue fiber strands",
+    "animation_instructions": "Pulsing photons traveling through glass, suddenly stuttering and going dark.",
+    "camera_movement": "Slow pull-back from frozen POS terminal",
+    "transitions": "Crossfade",
+    "sound_design": "Heavy industrial brake hiss, hydraulic halt",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 5,
+    "act_number": 1,
+    "narration_chunk": "No sirens sound in the streets. No explosions light up the skyline.",
+    "duration_sec": 5.0,
+    "characters": [
+      "The Investigator"
+    ],
+    "objects": [
+      "Undersea fiber optic cable",
+      "Glass core cross-section",
+      "BGP core router"
+    ],
+    "background_type": "Abyssal Pacific ocean floor with glowing blue fiber strands",
+    "animation_instructions": "Pulsing photons traveling through glass, suddenly stuttering and going dark.",
+    "camera_movement": "Rapid horizontal whip-pan to darkened container port",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Low frequency electrical transformer hum, switchboard snap",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 6,
+    "act_number": 2,
+    "narration_chunk": "The first hour looks innocent enough. You wake up, reach for your bedside table, and check notifications.",
+    "duration_sec": 7.1,
+    "characters": [
+      "Sleepy resident",
+      "The Investigator"
+    ],
+    "objects": [
+      "Smartphone screen",
+      "Cellular base station",
+      "Atomic clock symbol"
+    ],
+    "background_type": "Suburban bedroom transitioning to hilltop cellular antenna",
+    "animation_instructions": "Red signaling waves bursting from phone into tower, tower flashing overload warning.",
+    "camera_movement": "Subtle handheld drift inside emergency power room",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Warm analog radio static, tuning frequency whine",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 7,
+    "act_number": 2,
+    "narration_chunk": "Nothing. You toggle airplane mode on and off.",
+    "duration_sec": 3.5,
+    "characters": [
+      "Sleepy resident",
+      "The Investigator"
+    ],
+    "objects": [
+      "Smartphone screen",
+      "Cellular base station",
+      "Atomic clock symbol"
+    ],
+    "background_type": "Suburban bedroom transitioning to hilltop cellular antenna",
+    "animation_instructions": "Red signaling waves bursting from phone into tower, tower flashing overload warning.",
+    "camera_movement": "Centering slow zoom into transistor radio dial",
+    "transitions": "Crossfade",
+    "sound_design": "Cascading relay clicks, server fan acceleration",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 8,
+    "act_number": 2,
+    "narration_chunk": "You cycle your home Wi-Fi router. Across the globe, four billion people are doing the exact same thing at the exact same second.",
+    "duration_sec": 9.6,
+    "characters": [
+      "Sleepy resident",
+      "The Investigator"
+    ],
+    "objects": [
+      "Smartphone screen",
+      "Cellular base station",
+      "Atomic clock symbol"
+    ],
+    "background_type": "Suburban bedroom transitioning to hilltop cellular antenna",
+    "animation_instructions": "Red signaling waves bursting from phone into tower, tower flashing overload warning.",
+    "camera_movement": "Explosive outward zoom as network packets surge",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Soft wind across rooftops, fading digital chime",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 9,
+    "act_number": 2,
+    "narration_chunk": "And that harmless personal troubleshooting creates an immediate invisible catastrophe: a signaling storm. Every smartphone on the planet begins screaming reconnect handshakes into the nearest cellular tower.",
+    "duration_sec": 11.2,
+    "characters": [
+      "Sleepy resident",
+      "The Investigator"
+    ],
+    "objects": [
+      "Smartphone screen",
+      "Cellular base station",
+      "Atomic clock symbol"
+    ],
+    "background_type": "Suburban bedroom transitioning to hilltop cellular antenna",
+    "animation_instructions": "Red signaling waves bursting from phone into tower, tower flashing overload warning.",
+    "camera_movement": "Gentle floating crane shot over silent city rooftops",
+    "transitions": "Crossfade",
+    "sound_design": "Subsea ocean rumble, laser optical hum",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 10,
+    "act_number": 2,
+    "narration_chunk": "Base stations are designed to handle traffic spikes, but not infinite simultaneous connection requests. Worse, modern cellular towers do not operate in a vacuum.",
+    "duration_sec": 10.0,
+    "characters": [
+      "Sleepy resident",
+      "The Investigator"
+    ],
+    "objects": [
+      "Smartphone screen",
+      "Cellular base station",
+      "Atomic clock symbol"
+    ],
+    "background_type": "Suburban bedroom transitioning to hilltop cellular antenna",
+    "animation_instructions": "Red signaling waves bursting from phone into tower, tower flashing overload warning.",
+    "camera_movement": "Slow cinematic pan right across cable lines",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Subtle static crackle, digital packet beep",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 11,
+    "act_number": 3,
+    "narration_chunk": "By hour three, morning arrives in London, Frankfurt, and New York. People leave their silent houses and step into the street.",
+    "duration_sec": 8.8,
+    "characters": [
+      "Customer with wallet",
+      "Stressed store cashier"
+    ],
+    "objects": [
+      "Credit card terminal",
+      "Gas pump nozzle",
+      "Prescription medicine bottles"
+    ],
+    "background_type": "Fluorescent convenience store counter",
+    "animation_instructions": "Terminal display pulsing 'TIMEOUT', cashier shrugging, analog cash register drawer jamming.",
+    "camera_movement": "Dynamic push-in on optical fiber core",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Card swipe chime, sharp buzzer error tone",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 12,
+    "act_number": 3,
+    "narration_chunk": "You decide to buy a coffee, or fill your car's gas tank before heading to work. You tap your card against the terminal.",
+    "duration_sec": 9.6,
+    "characters": [
+      "Customer with wallet",
+      "Stressed store cashier"
+    ],
+    "objects": [
+      "Credit card terminal",
+      "Gas pump nozzle",
+      "Prescription medicine bottles"
+    ],
+    "background_type": "Fluorescent convenience store counter",
+    "animation_instructions": "Terminal display pulsing 'TIMEOUT', cashier shrugging, analog cash register drawer jamming.",
+    "camera_movement": "Parallax drift upward revealing radio tower",
+    "transitions": "Crossfade",
+    "sound_design": "Heavy industrial brake hiss, hydraulic halt",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 13,
+    "act_number": 3,
+    "narration_chunk": "The terminal beeps, hangs for twenty seconds, and displays a single word: TIMEOUT. Here is the dirty secret of modern money: physical cash represents less than eight percent of global currency.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Customer with wallet",
+      "Stressed store cashier"
+    ],
+    "objects": [
+      "Credit card terminal",
+      "Gas pump nozzle",
+      "Prescription medicine bottles"
+    ],
+    "background_type": "Fluorescent convenience store counter",
+    "animation_instructions": "Terminal display pulsing 'TIMEOUT', cashier shrugging, analog cash register drawer jamming.",
+    "camera_movement": "Slow pull-back from frozen POS terminal",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Low frequency electrical transformer hum, switchboard snap",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 14,
+    "act_number": 3,
+    "narration_chunk": "The rest is numbers living on distributed ledger mainframes. Every time you buy a sandwich, your point-of-sale device initiates an encrypted handshake through an acquiring bank, into Visa or Mastercard's global switching center, and down to the Federal Reserve's Fedwire settlement architecture.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Customer with wallet",
+      "Stressed store cashier"
+    ],
+    "objects": [
+      "Credit card terminal",
+      "Gas pump nozzle",
+      "Prescription medicine bottles"
+    ],
+    "background_type": "Fluorescent convenience store counter",
+    "animation_instructions": "Terminal display pulsing 'TIMEOUT', cashier shrugging, analog cash register drawer jamming.",
+    "camera_movement": "Rapid horizontal whip-pan to darkened container port",
+    "transitions": "Crossfade",
+    "sound_design": "Warm analog radio static, tuning frequency whine",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 15,
+    "act_number": 3,
+    "narration_chunk": "When packet routing dies, the credit card terminal becomes an expensive plastic paperweight. Gas station pumps freeze because their automated safety cutoff systems require cloud telemetry authorization before releasing fuel.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Customer with wallet",
+      "Stressed store cashier"
+    ],
+    "objects": [
+      "Credit card terminal",
+      "Gas pump nozzle",
+      "Prescription medicine bottles"
+    ],
+    "background_type": "Fluorescent convenience store counter",
+    "animation_instructions": "Terminal display pulsing 'TIMEOUT', cashier shrugging, analog cash register drawer jamming.",
+    "camera_movement": "Subtle handheld drift inside emergency power room",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Cascading relay clicks, server fan acceleration",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 16,
+    "act_number": 4,
+    "narration_chunk": "By hour six, the paralysis reaches the arteries of industrial logistics. Walk into an Amazon fulfillment center or an automated logistics depot in Rotterdam.",
+    "duration_sec": 10.0,
+    "characters": [
+      "Logistics operator",
+      "Cargo crane technician"
+    ],
+    "objects": [
+      "Kiva automated robot",
+      "Container crane",
+      "Boeing airliner cockpit"
+    ],
+    "background_type": "Vast darkened Amazon fulfillment center and container ship deck",
+    "animation_instructions": "Robotic orange carriers skidding to an abrupt stop, crane cables swinging motionless in breeze.",
+    "camera_movement": "Centering slow zoom into transistor radio dial",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Soft wind across rooftops, fading digital chime",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 17,
+    "act_number": 4,
+    "narration_chunk": "Tens of thousands of autonomous orange drive units navigate by querying central cloud schedulers thirty times a second. Without that central heartbeat, emergency fail-safe brakes engage.",
+    "duration_sec": 10.8,
+    "characters": [
+      "Logistics operator",
+      "Cargo crane technician"
+    ],
+    "objects": [
+      "Kiva automated robot",
+      "Container crane",
+      "Boeing airliner cockpit"
+    ],
+    "background_type": "Vast darkened Amazon fulfillment center and container ship deck",
+    "animation_instructions": "Robotic orange carriers skidding to an abrupt stop, crane cables swinging motionless in breeze.",
+    "camera_movement": "Explosive outward zoom as network packets surge",
+    "transitions": "Crossfade",
+    "sound_design": "Subsea ocean rumble, laser optical hum",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 18,
+    "act_number": 4,
+    "narration_chunk": "Three million square feet of merchandise freeze instantly in place. Outside, long-haul truckers cannot receive their digital bills of lading or dispatch manifests.",
+    "duration_sec": 9.6,
+    "characters": [
+      "Logistics operator",
+      "Cargo crane technician"
+    ],
+    "objects": [
+      "Kiva automated robot",
+      "Container crane",
+      "Boeing airliner cockpit"
+    ],
+    "background_type": "Vast darkened Amazon fulfillment center and container ship deck",
+    "animation_instructions": "Robotic orange carriers skidding to an abrupt stop, crane cables swinging motionless in breeze.",
+    "camera_movement": "Gentle floating crane shot over silent city rooftops",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Subtle static crackle, digital packet beep",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 19,
+    "act_number": 4,
+    "narration_chunk": "At the world's deepest container ports\u2014Singapore, Shanghai, Los Angeles\u2014giant ship-to-shore gantry cranes halt. Modern container vessels carry twenty-four thousand steel boxes.",
+    "duration_sec": 8.8,
+    "characters": [
+      "Logistics operator",
+      "Cargo crane technician"
+    ],
+    "objects": [
+      "Kiva automated robot",
+      "Container crane",
+      "Boeing airliner cockpit"
+    ],
+    "background_type": "Vast darkened Amazon fulfillment center and container ship deck",
+    "animation_instructions": "Robotic orange carriers skidding to an abrupt stop, crane cables swinging motionless in breeze.",
+    "camera_movement": "Slow cinematic pan right across cable lines",
+    "transitions": "Crossfade",
+    "sound_design": "Card swipe chime, sharp buzzer error tone",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 20,
+    "act_number": 4,
+    "narration_chunk": "No human being on earth knows which box holds insulin and which holds plastic toys without querying an online relational database. Meanwhile, up in the sky, a strange drama unfolds.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Logistics operator",
+      "Cargo crane technician"
+    ],
+    "objects": [
+      "Kiva automated robot",
+      "Container crane",
+      "Boeing airliner cockpit"
+    ],
+    "background_type": "Vast darkened Amazon fulfillment center and container ship deck",
+    "animation_instructions": "Robotic orange carriers skidding to an abrupt stop, crane cables swinging motionless in breeze.",
+    "camera_movement": "Dynamic push-in on optical fiber core",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Heavy industrial brake hiss, hydraulic halt",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 21,
+    "act_number": 5,
+    "narration_chunk": "Twelve hours into the silence, the crisis moves into our most critical life support: the electrical grid. Most people assume power plants burn coal, gas, or uranium and push electricity down copper wires automatically.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Grid dispatcher in hard hat"
+    ],
+    "objects": [
+      "SCADA monitor dials",
+      "High-voltage transformer",
+      "Diesel generator exhaust"
+    ],
+    "background_type": "Regional transmission control room with blinking green/red mosaic wall",
+    "animation_instructions": "Dials fluctuating wildly, breaker switch dropping with spark, control room lights switching to emergency red.",
+    "camera_movement": "Parallax drift upward revealing radio tower",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Low frequency electrical transformer hum, switchboard snap",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 22,
+    "act_number": 5,
+    "narration_chunk": "In reality, an electrical grid is a high-speed balancing act. Supply must equal demand across sixty cycles per second, every second of the day.",
+    "duration_sec": 10.0,
+    "characters": [
+      "Grid dispatcher in hard hat"
+    ],
+    "objects": [
+      "SCADA monitor dials",
+      "High-voltage transformer",
+      "Diesel generator exhaust"
+    ],
+    "background_type": "Regional transmission control room with blinking green/red mosaic wall",
+    "animation_instructions": "Dials fluctuating wildly, breaker switch dropping with spark, control room lights switching to emergency red.",
+    "camera_movement": "Slow pull-back from frozen POS terminal",
+    "transitions": "Crossfade",
+    "sound_design": "Warm analog radio static, tuning frequency whine",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 23,
+    "act_number": 5,
+    "narration_chunk": "To balance that delicate equilibrium, regional transmission operators rely on SCADA systems: Supervisory Control and Data Acquisition. Substations thousands of miles away report voltage fluctuations and phase angles across dedicated IP networks.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Grid dispatcher in hard hat"
+    ],
+    "objects": [
+      "SCADA monitor dials",
+      "High-voltage transformer",
+      "Diesel generator exhaust"
+    ],
+    "background_type": "Regional transmission control room with blinking green/red mosaic wall",
+    "animation_instructions": "Dials fluctuating wildly, breaker switch dropping with spark, control room lights switching to emergency red.",
+    "camera_movement": "Rapid horizontal whip-pan to darkened container port",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Cascading relay clicks, server fan acceleration",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 24,
+    "act_number": 5,
+    "narration_chunk": "When the digital link is severed, control room operators in cities across the world are suddenly flying blind. They can no longer read the temperatures of extra-high-voltage transformers.",
+    "duration_sec": 11.7,
+    "characters": [
+      "Grid dispatcher in hard hat"
+    ],
+    "objects": [
+      "SCADA monitor dials",
+      "High-voltage transformer",
+      "Diesel generator exhaust"
+    ],
+    "background_type": "Regional transmission control room with blinking green/red mosaic wall",
+    "animation_instructions": "Dials fluctuating wildly, breaker switch dropping with spark, control room lights switching to emergency red.",
+    "camera_movement": "Subtle handheld drift inside emergency power room",
+    "transitions": "Crossfade",
+    "sound_design": "Soft wind across rooftops, fading digital chime",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 25,
+    "act_number": 5,
+    "narration_chunk": "To prevent catastrophic grid-wide collapse, automated protective relays do what they were designed to do: they disconnect. The grid fractures into isolated regional islands.",
+    "duration_sec": 10.0,
+    "characters": [
+      "Grid dispatcher in hard hat"
+    ],
+    "objects": [
+      "SCADA monitor dials",
+      "High-voltage transformer",
+      "Diesel generator exhaust"
+    ],
+    "background_type": "Regional transmission control room with blinking green/red mosaic wall",
+    "animation_instructions": "Dials fluctuating wildly, breaker switch dropping with spark, control room lights switching to emergency red.",
+    "camera_movement": "Centering slow zoom into transistor radio dial",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Subsea ocean rumble, laser optical hum",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 26,
+    "act_number": 6,
+    "narration_chunk": "Eighteen hours in. The sun has set.",
+    "duration_sec": 3.5,
+    "characters": [
+      "Neighborhood crowd",
+      "Radio host at microphone",
+      "The Investigator"
+    ],
+    "objects": [
+      "AM transistor radio",
+      "Handwritten paper notice",
+      "Megaphone"
+    ],
+    "background_type": "Neighborhood street corner under brilliant starry night sky",
+    "animation_instructions": "Radio vacuum tube glowing warm amber, analog soundwaves rippling gently over front porches.",
+    "camera_movement": "Explosive outward zoom as network packets surge",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Subtle static crackle, digital packet beep",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 27,
+    "act_number": 6,
+    "narration_chunk": "And an eerie, fascinating transformation occurs across human civilization. With no social media feeds, no streaming platforms, and no endless notifications, the noise of the digital age vanishes.",
+    "duration_sec": 11.7,
+    "characters": [
+      "Neighborhood crowd",
+      "Radio host at microphone",
+      "The Investigator"
+    ],
+    "objects": [
+      "AM transistor radio",
+      "Handwritten paper notice",
+      "Megaphone"
+    ],
+    "background_type": "Neighborhood street corner under brilliant starry night sky",
+    "animation_instructions": "Radio vacuum tube glowing warm amber, analog soundwaves rippling gently over front porches.",
+    "camera_movement": "Gentle floating crane shot over silent city rooftops",
+    "transitions": "Crossfade",
+    "sound_design": "Card swipe chime, sharp buzzer error tone",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 28,
+    "act_number": 6,
+    "narration_chunk": "People walk outside onto their front porches. Neighbors who haven't spoken in five years lean across fences to exchange news.",
+    "duration_sec": 8.3,
+    "characters": [
+      "Neighborhood crowd",
+      "Radio host at microphone",
+      "The Investigator"
+    ],
+    "objects": [
+      "AM transistor radio",
+      "Handwritten paper notice",
+      "Megaphone"
+    ],
+    "background_type": "Neighborhood street corner under brilliant starry night sky",
+    "animation_instructions": "Radio vacuum tube glowing warm amber, analog soundwaves rippling gently over front porches.",
+    "camera_movement": "Slow cinematic pan right across cable lines",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Heavy industrial brake hiss, hydraulic halt",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 29,
+    "act_number": 6,
+    "narration_chunk": "In city squares, municipal workers pull out battery-powered megaphones and staple handwritten notices to wooden corkboards. Old dust-covered AM and FM transistor radios are pulled from basements and attic boxes.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Neighborhood crowd",
+      "Radio host at microphone",
+      "The Investigator"
+    ],
+    "objects": [
+      "AM transistor radio",
+      "Handwritten paper notice",
+      "Megaphone"
+    ],
+    "background_type": "Neighborhood street corner under brilliant starry night sky",
+    "animation_instructions": "Radio vacuum tube glowing warm amber, analog soundwaves rippling gently over front porches.",
+    "camera_movement": "Dynamic push-in on optical fiber core",
+    "transitions": "Crossfade",
+    "sound_design": "Low frequency electrical transformer hum, switchboard snap",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 30,
+    "act_number": 6,
+    "narration_chunk": "Broadcast radio towers\u2014transmitting powerful analog electromagnetic waves that require no IP routing or server handshakes\u2014become the sole beacons of truth. Local radio hosts read lists of which grocery stores are accepting paper cash, which clinics have emergency power, and where clean water is available.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Neighborhood crowd",
+      "Radio host at microphone",
+      "The Investigator"
+    ],
+    "objects": [
+      "AM transistor radio",
+      "Handwritten paper notice",
+      "Megaphone"
+    ],
+    "background_type": "Neighborhood street corner under brilliant starry night sky",
+    "animation_instructions": "Radio vacuum tube glowing warm amber, analog soundwaves rippling gently over front porches.",
+    "camera_movement": "Parallax drift upward revealing radio tower",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Warm analog radio static, tuning frequency whine",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 31,
+    "act_number": 7,
+    "narration_chunk": "Twenty-four hours after the blackout began, the root cause is resolved. Engineers in subterranean carrier hotels manually restore the BGP routing tables.",
+    "duration_sec": 9.2,
+    "characters": [
+      "Server technician",
+      "The Investigator"
+    ],
+    "objects": [
+      "Server blade rack",
+      "BGP route matrix diagram",
+      "Traffic graph gauge"
+    ],
+    "background_type": "Subterranean carrier hotel data center with glowing LED arrays",
+    "animation_instructions": "LED indicators turning from red to amber to blue; network graph spiking past maximum limit.",
+    "camera_movement": "Slow pull-back from frozen POS terminal",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Cascading relay clicks, server fan acceleration",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 32,
+    "act_number": 7,
+    "narration_chunk": "Subsea amplifiers stabilize. DNS root servers begin answering queries once more.",
+    "duration_sec": 4.6,
+    "characters": [
+      "Server technician",
+      "The Investigator"
+    ],
+    "objects": [
+      "Server blade rack",
+      "BGP route matrix diagram",
+      "Traffic graph gauge"
+    ],
+    "background_type": "Subterranean carrier hotel data center with glowing LED arrays",
+    "animation_instructions": "LED indicators turning from red to amber to blue; network graph spiking past maximum limit.",
+    "camera_movement": "Rapid horizontal whip-pan to darkened container port",
+    "transitions": "Crossfade",
+    "sound_design": "Soft wind across rooftops, fading digital chime",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 33,
+    "act_number": 7,
+    "narration_chunk": "You would think that the moment the switch is flipped, the world simply resumes as if waking from a dream. Engineers know better.",
+    "duration_sec": 9.6,
+    "characters": [
+      "Server technician",
+      "The Investigator"
+    ],
+    "objects": [
+      "Server blade rack",
+      "BGP route matrix diagram",
+      "Traffic graph gauge"
+    ],
+    "background_type": "Subterranean carrier hotel data center with glowing LED arrays",
+    "animation_instructions": "LED indicators turning from red to amber to blue; network graph spiking past maximum limit.",
+    "camera_movement": "Subtle handheld drift inside emergency power room",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Subsea ocean rumble, laser optical hum",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 34,
+    "act_number": 7,
+    "narration_chunk": "In computer science, there is a legendary nightmare known as the Thundering Herd Problem. For twenty-four hours, two billion automated IoT devices, three billion smartphones, millions of microservices, and hundreds of thousands of corporate cron jobs have been queueing failed requests with aggressive retry timers.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Server technician",
+      "The Investigator"
+    ],
+    "objects": [
+      "Server blade rack",
+      "BGP route matrix diagram",
+      "Traffic graph gauge"
+    ],
+    "background_type": "Subterranean carrier hotel data center with glowing LED arrays",
+    "animation_instructions": "LED indicators turning from red to amber to blue; network graph spiking past maximum limit.",
+    "camera_movement": "Centering slow zoom into transistor radio dial",
+    "transitions": "Crossfade",
+    "sound_design": "Subtle static crackle, digital packet beep",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 35,
+    "act_number": 7,
+    "narration_chunk": "The instant connectivity blinks back online, those billions of devices do not politely take turns. They slam every server on the planet with the largest distributed denial-of-service attack in the history of the universe.",
+    "duration_sec": 12.0,
+    "characters": [
+      "Server technician",
+      "The Investigator"
+    ],
+    "objects": [
+      "Server blade rack",
+      "BGP route matrix diagram",
+      "Traffic graph gauge"
+    ],
+    "background_type": "Subterranean carrier hotel data center with glowing LED arrays",
+    "animation_instructions": "LED indicators turning from red to amber to blue; network graph spiking past maximum limit.",
+    "camera_movement": "Explosive outward zoom as network packets surge",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Card swipe chime, sharp buzzer error tone",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 36,
+    "act_number": 8,
+    "narration_chunk": "Twenty-four hours without the internet would cost the global economy an estimated fifty billion dollars in lost commerce. Millions of tons of perishable food would spoil in delayed refrigerated trucks.",
+    "duration_sec": 12.0,
+    "characters": [
+      "The Investigator"
+    ],
+    "objects": [
+      "Glowing fiber filament held in hand",
+      "World silhouette",
+      "Channel emblem"
+    ],
+    "background_type": "Minimalist ink backdrop with delicate copper line art",
+    "animation_instructions": "The Investigator holds glowing fiber strand to the camera; slow dissolve into channel insignia.",
+    "camera_movement": "Gentle floating crane shot over silent city rooftops",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Heavy industrial brake hiss, hydraulic halt",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 37,
+    "act_number": 8,
+    "narration_chunk": "Contracts would default, financial settlements would tangle in courts for months, and supply chains would stutter for weeks. Yet, the greatest cost would not be financial.",
+    "duration_sec": 10.8,
+    "characters": [
+      "The Investigator"
+    ],
+    "objects": [
+      "Glowing fiber filament held in hand",
+      "World silhouette",
+      "Channel emblem"
+    ],
+    "background_type": "Minimalist ink backdrop with delicate copper line art",
+    "animation_instructions": "The Investigator holds glowing fiber strand to the camera; slow dissolve into channel insignia.",
+    "camera_movement": "Slow cinematic pan right across cable lines",
+    "transitions": "Crossfade",
+    "sound_design": "Low frequency electrical transformer hum, switchboard snap",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 38,
+    "act_number": 8,
+    "narration_chunk": "It would be psychological. Because for twenty-four hours, the veil would be lifted.",
+    "duration_sec": 5.4,
+    "characters": [
+      "The Investigator"
+    ],
+    "objects": [
+      "Glowing fiber filament held in hand",
+      "World silhouette",
+      "Channel emblem"
+    ],
+    "background_type": "Minimalist ink backdrop with delicate copper line art",
+    "animation_instructions": "The Investigator holds glowing fiber strand to the camera; slow dissolve into channel insignia.",
+    "camera_movement": "Dynamic push-in on optical fiber core",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Warm analog radio static, tuning frequency whine",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 39,
+    "act_number": 8,
+    "narration_chunk": "We would be reminded that our modern, frictionless world\u2014where groceries arrive at our door with a tap, where money exists as clean digital typography, and where every human being is reachable in milliseconds\u2014is built on a foundation of fragile physical glass. A world where four billion people can be severed from civilization not by an asteroid or an earthquake, but by a corrupted routing table or a severed subsea line.",
+    "duration_sec": 12.0,
+    "characters": [
+      "The Investigator"
+    ],
+    "objects": [
+      "Glowing fiber filament held in hand",
+      "World silhouette",
+      "Channel emblem"
+    ],
+    "background_type": "Minimalist ink backdrop with delicate copper line art",
+    "animation_instructions": "The Investigator holds glowing fiber strand to the camera; slow dissolve into channel insignia.",
+    "camera_movement": "Parallax drift upward revealing radio tower",
+    "transitions": "Crossfade",
+    "sound_design": "Cascading relay clicks, server fan acceleration",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  },
+  {
+    "scene_id": 40,
+    "act_number": 8,
+    "narration_chunk": "The internet is not a cloud. It is a machine.",
+    "duration_sec": 4.2,
+    "characters": [
+      "The Investigator"
+    ],
+    "objects": [
+      "Glowing fiber filament held in hand",
+      "World silhouette",
+      "Channel emblem"
+    ],
+    "background_type": "Minimalist ink backdrop with delicate copper line art",
+    "animation_instructions": "The Investigator holds glowing fiber strand to the camera; slow dissolve into channel insignia.",
+    "camera_movement": "Slow pull-back from frozen POS terminal",
+    "transitions": "Sketch reveal wipe",
+    "sound_design": "Soft wind across rooftops, fading digital chime",
+    "visual_asset_path": null,
+    "rendered_video_path": null,
+    "rendered": false
+  }
+]

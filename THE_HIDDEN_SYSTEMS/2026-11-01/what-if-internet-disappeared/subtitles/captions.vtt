@@ -1,0 +1,497 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:02.553
+Right now, as you listen to my voice, roughly four
+
+2
+00:00:02.553 --> 00:00:05.106
+billion pulses of light are rocketing through strands of glass
+
+3
+00:00:05.106 --> 00:00:07.659
+beneath the Atlantic Ocean. Every credit card swipe, every flight
+
+4
+00:00:07.659 --> 00:00:10.212
+path, every automated pacemaker update is riding on an invisible
+
+5
+00:00:10.212 --> 00:00:12.000
+lattice of protocols written in the 1980s.
+
+6
+00:00:12.000 --> 00:00:16.176
+We treat the internet like the weather: a permanent, atmospheric
+
+7
+00:00:16.176 --> 00:00:19.099
+fact of nature. But it isn't nature.
+
+8
+00:00:19.100 --> 00:00:23.281
+It is glass, copper, electricity, and a handful of routing
+
+9
+00:00:23.281 --> 00:00:27.463
+tables that we trust with civilization. Now imagine it is
+
+10
+00:00:27.463 --> 00:00:28.299
+midnight UTC.
+
+11
+00:00:28.300 --> 00:00:32.466
+Somewhere in the deep Pacific, an anomaly cascades. Within ninety
+
+12
+00:00:32.466 --> 00:00:36.633
+seconds, the Border Gateway Protocol keepalive timers across twelve thousand
+
+13
+00:00:36.633 --> 00:00:38.299
+autonomous systems hit zero.
+
+14
+00:00:38.299 --> 00:00:42.466
+No sirens sound in the streets. No explosions light up
+
+15
+00:00:42.466 --> 00:00:43.299
+the skyline.
+
+16
+00:00:43.299 --> 00:00:47.476
+The first hour looks innocent enough. You wake up, reach
+
+17
+00:00:47.476 --> 00:00:50.399
+for your bedside table, and check notifications.
+
+18
+00:00:50.399 --> 00:00:53.899
+Nothing. You toggle airplane mode on and off.
+
+19
+00:00:53.899 --> 00:00:58.073
+You cycle your home Wi-Fi router. Across the globe, four
+
+20
+00:00:58.073 --> 00:01:02.247
+billion people are doing the exact same thing at the
+
+21
+00:01:02.247 --> 00:01:03.499
+exact same second.
+
+22
+00:01:03.500 --> 00:01:07.648
+And that harmless personal troubleshooting creates an immediate invisible catastrophe:
+
+23
+00:01:07.648 --> 00:01:11.796
+a signaling storm. Every smartphone on the planet begins screaming
+
+24
+00:01:11.796 --> 00:01:14.700
+reconnect handshakes into the nearest cellular tower.
+
+25
+00:01:14.700 --> 00:01:18.866
+Base stations are designed to handle traffic spikes, but not
+
+26
+00:01:18.866 --> 00:01:23.033
+infinite simultaneous connection requests. Worse, modern cellular towers do not
+
+27
+00:01:23.033 --> 00:01:24.700
+operate in a vacuum.
+
+28
+00:01:24.700 --> 00:01:28.890
+By hour three, morning arrives in London, Frankfurt, and New
+
+29
+00:01:28.890 --> 00:01:33.080
+York. People leave their silent houses and step into the
+
+30
+00:01:33.080 --> 00:01:33.500
+street.
+
+31
+00:01:33.500 --> 00:01:37.673
+You decide to buy a coffee, or fill your car's
+
+32
+00:01:37.673 --> 00:01:41.847
+gas tank before heading to work. You tap your card
+
+33
+00:01:41.847 --> 00:01:43.099
+against the terminal.
+
+34
+00:01:43.099 --> 00:01:46.970
+The terminal beeps, hangs for twenty seconds, and displays a
+
+35
+00:01:46.970 --> 00:01:50.841
+single word: TIMEOUT. Here is the dirty secret of modern
+
+36
+00:01:50.841 --> 00:01:54.712
+money: physical cash represents less than eight percent of global
+
+37
+00:01:54.712 --> 00:01:55.099
+currency.
+
+38
+00:01:55.099 --> 00:01:57.957
+The rest is numbers living on distributed ledger mainframes. Every
+
+39
+00:01:57.957 --> 00:02:00.814
+time you buy a sandwich, your point-of-sale device initiates an
+
+40
+00:02:00.814 --> 00:02:03.671
+encrypted handshake through an acquiring bank, into Visa or Mastercard's
+
+41
+00:02:03.671 --> 00:02:06.528
+global switching center, and down to the Federal Reserve's Fedwire
+
+42
+00:02:06.528 --> 00:02:07.099
+settlement architecture.
+
+43
+00:02:07.099 --> 00:02:11.099
+When packet routing dies, the credit card terminal becomes an
+
+44
+00:02:11.099 --> 00:02:15.099
+expensive plastic paperweight. Gas station pumps freeze because their automated
+
+45
+00:02:15.099 --> 00:02:19.099
+safety cutoff systems require cloud telemetry authorization before releasing fuel.
+
+46
+00:02:19.099 --> 00:02:23.266
+By hour six, the paralysis reaches the arteries of industrial
+
+47
+00:02:23.266 --> 00:02:27.433
+logistics. Walk into an Amazon fulfillment center or an automated
+
+48
+00:02:27.433 --> 00:02:29.099
+logistics depot in Rotterdam.
+
+49
+00:02:29.099 --> 00:02:33.253
+Tens of thousands of autonomous orange drive units navigate by
+
+50
+00:02:33.253 --> 00:02:37.407
+querying central cloud schedulers thirty times a second. Without that
+
+51
+00:02:37.407 --> 00:02:39.900
+central heartbeat, emergency fail-safe brakes engage.
+
+52
+00:02:39.900 --> 00:02:44.073
+Three million square feet of merchandise freeze instantly in place.
+
+53
+00:02:44.073 --> 00:02:48.247
+Outside, long-haul truckers cannot receive their digital bills of lading
+
+54
+00:02:48.247 --> 00:02:49.500
+or dispatch manifests.
+
+55
+00:02:49.500 --> 00:02:53.690
+At the world's deepest container ports—Singapore, Shanghai, Los Angeles—giant ship-to-shore
+
+56
+00:02:53.690 --> 00:02:57.880
+gantry cranes halt. Modern container vessels carry twenty-four thousand steel
+
+57
+00:02:57.880 --> 00:02:58.300
+boxes.
+
+58
+00:02:58.300 --> 00:03:02.300
+No human being on earth knows which box holds insulin
+
+59
+00:03:02.300 --> 00:03:06.300
+and which holds plastic toys without querying an online relational
+
+60
+00:03:06.300 --> 00:03:10.300
+database. Meanwhile, up in the sky, a strange drama unfolds.
+
+61
+00:03:10.300 --> 00:03:13.829
+Twelve hours into the silence, the crisis moves into our
+
+62
+00:03:13.829 --> 00:03:17.358
+most critical life support: the electrical grid. Most people assume
+
+63
+00:03:17.358 --> 00:03:20.888
+power plants burn coal, gas, or uranium and push electricity
+
+64
+00:03:20.888 --> 00:03:22.300
+down copper wires automatically.
+
+65
+00:03:22.300 --> 00:03:26.466
+In reality, an electrical grid is a high-speed balancing act.
+
+66
+00:03:26.466 --> 00:03:30.633
+Supply must equal demand across sixty cycles per second, every
+
+67
+00:03:30.633 --> 00:03:32.299
+second of the day.
+
+68
+00:03:32.300 --> 00:03:36.050
+To balance that delicate equilibrium, regional transmission operators rely on
+
+69
+00:03:36.050 --> 00:03:39.800
+SCADA systems: Supervisory Control and Data Acquisition. Substations thousands of
+
+70
+00:03:39.800 --> 00:03:43.550
+miles away report voltage fluctuations and phase angles across dedicated
+
+71
+00:03:43.550 --> 00:03:44.300
+IP networks.
+
+72
+00:03:44.300 --> 00:03:48.478
+When the digital link is severed, control room operators in
+
+73
+00:03:48.478 --> 00:03:52.657
+cities across the world are suddenly flying blind. They can
+
+74
+00:03:52.657 --> 00:03:56.000
+no longer read the temperatures of extra-high-voltage transformers.
+
+75
+00:03:56.000 --> 00:04:00.166
+To prevent catastrophic grid-wide collapse, automated protective relays do what
+
+76
+00:04:00.166 --> 00:04:04.333
+they were designed to do: they disconnect. The grid fractures
+
+77
+00:04:04.333 --> 00:04:05.999
+into isolated regional islands.
+
+78
+00:04:06.000 --> 00:04:09.500
+Eighteen hours in. The sun has set.
+
+79
+00:04:09.500 --> 00:04:13.678
+And an eerie, fascinating transformation occurs across human civilization. With
+
+80
+00:04:13.678 --> 00:04:17.857
+no social media feeds, no streaming platforms, and no endless
+
+81
+00:04:17.857 --> 00:04:21.199
+notifications, the noise of the digital age vanishes.
+
+82
+00:04:21.199 --> 00:04:25.349
+People walk outside onto their front porches. Neighbors who haven't
+
+83
+00:04:25.349 --> 00:04:29.499
+spoken in five years lean across fences to exchange news.
+
+84
+00:04:29.500 --> 00:04:33.500
+In city squares, municipal workers pull out battery-powered megaphones and
+
+85
+00:04:33.500 --> 00:04:37.500
+staple handwritten notices to wooden corkboards. Old dust-covered AM and
+
+86
+00:04:37.500 --> 00:04:41.500
+FM transistor radios are pulled from basements and attic boxes.
+
+87
+00:04:41.500 --> 00:04:44.227
+Broadcast radio towers—transmitting powerful analog electromagnetic waves that require no
+
+88
+00:04:44.227 --> 00:04:46.954
+IP routing or server handshakes—become the sole beacons of truth.
+
+89
+00:04:46.954 --> 00:04:49.681
+Local radio hosts read lists of which grocery stores are
+
+90
+00:04:49.681 --> 00:04:52.409
+accepting paper cash, which clinics have emergency power, and where
+
+91
+00:04:52.409 --> 00:04:53.500
+clean water is available.
+
+92
+00:04:53.500 --> 00:04:57.681
+Twenty-four hours after the blackout began, the root cause is
+
+93
+00:04:57.681 --> 00:05:01.863
+resolved. Engineers in subterranean carrier hotels manually restore the BGP
+
+94
+00:05:01.863 --> 00:05:02.699
+routing tables.
+
+95
+00:05:02.699 --> 00:05:06.881
+Subsea amplifiers stabilize. DNS root servers begin answering queries once
+
+96
+00:05:06.881 --> 00:05:07.300
+more.
+
+97
+00:05:07.300 --> 00:05:11.473
+You would think that the moment the switch is flipped,
+
+98
+00:05:11.473 --> 00:05:15.647
+the world simply resumes as if waking from a dream.
+
+99
+00:05:15.647 --> 00:05:16.899
+Engineers know better.
+
+100
+00:05:16.900 --> 00:05:19.566
+In computer science, there is a legendary nightmare known as
+
+101
+00:05:19.566 --> 00:05:22.233
+the Thundering Herd Problem. For twenty-four hours, two billion automated
+
+102
+00:05:22.233 --> 00:05:24.900
+IoT devices, three billion smartphones, millions of microservices, and hundreds
+
+103
+00:05:24.900 --> 00:05:27.566
+of thousands of corporate cron jobs have been queueing failed
+
+104
+00:05:27.566 --> 00:05:28.900
+requests with aggressive retry timers.
+
+105
+00:05:28.900 --> 00:05:32.429
+The instant connectivity blinks back online, those billions of devices
+
+106
+00:05:32.429 --> 00:05:35.958
+do not politely take turns. They slam every server on
+
+107
+00:05:35.958 --> 00:05:39.488
+the planet with the largest distributed denial-of-service attack in the
+
+108
+00:05:39.488 --> 00:05:40.899
+history of the universe.
+
+109
+00:05:40.900 --> 00:05:44.900
+Twenty-four hours without the internet would cost the global economy
+
+110
+00:05:44.900 --> 00:05:48.900
+an estimated fifty billion dollars in lost commerce. Millions of
+
+111
+00:05:48.900 --> 00:05:52.900
+tons of perishable food would spoil in delayed refrigerated trucks.
+
+112
+00:05:52.900 --> 00:05:57.053
+Contracts would default, financial settlements would tangle in courts for
+
+113
+00:05:57.053 --> 00:06:01.207
+months, and supply chains would stutter for weeks. Yet, the
+
+114
+00:06:01.207 --> 00:06:03.699
+greatest cost would not be financial.
+
+115
+00:06:03.700 --> 00:06:07.853
+It would be psychological. Because for twenty-four hours, the veil
+
+116
+00:06:07.853 --> 00:06:09.100
+would be lifted.
+
+117
+00:06:09.100 --> 00:06:10.814
+We would be reminded that our modern, frictionless world—where groceries
+
+118
+00:06:10.814 --> 00:06:12.528
+arrive at our door with a tap, where money exists
+
+119
+00:06:12.528 --> 00:06:14.242
+as clean digital typography, and where every human being is
+
+120
+00:06:14.242 --> 00:06:15.957
+reachable in milliseconds—is built on a foundation of fragile physical
+
+121
+00:06:15.957 --> 00:06:17.671
+glass. A world where four billion people can be severed
+
+122
+00:06:17.671 --> 00:06:19.385
+from civilization not by an asteroid or an earthquake, but
+
+123
+00:06:19.385 --> 00:06:21.100
+by a corrupted routing table or a severed subsea line.
+
+124
+00:06:21.100 --> 00:06:25.300
+The internet is not a cloud. It is a machine.

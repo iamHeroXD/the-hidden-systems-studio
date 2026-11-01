@@ -1,0 +1,70 @@
+{
+  "title_options": [
+    "What If The Entire Internet Disappeared For 24 Hours?",
+    "The Day The Global Network Died: An Hour-By-Hour Simulation",
+    "Why Civilization Cannot Survive 24 Hours Without Subsea Cables"
+  ],
+  "final_title": "What If The Entire Internet Disappeared For 24 Hours?",
+  "description": "Right now, over 99% of all intercontinental communication rides on an invisible lattice of subsea fiber optic cables and Border Gateway Protocol routing tables written in the 1980s. But what happens if that invisible machine stops?\n\nIn this documentary, The Hidden Systems breaks down the hour-by-hour collapse of modern infrastructure if the entire internet disappeared for twenty-four hours: from the cellular signaling storms that overwhelm local radio towers, to frozen supermarket cash registers, grounded international aviation, and the terrifying 'Thundering Herd' reboot surge.\n\nTIMESTAMPS:\n00:00 - The Silence at 00:00:00\n01:45 - Hour 1: The Signaling Storm\n03:30 - Hour 3: The Ghost Cash Register\n05:15 - Hour 6: The Blind Giants of Commerce\n07:05 - Hour 12: Islanding the Power Grid\n08:50 - Hour 18: The Analog Renaissance\n10:35 - Hour 24: The Thundering Herd Problem\n12:15 - Conclusion: The Fragility of Civilization\n\nSOURCES & VERIFIED RESEARCH:\n- TeleGeography Global Submarine Telecoms Industry Report\n- RFC 4271: A Border Gateway Protocol 4 (BGP-4) Specification\n- Bank for International Settlements (BIS) Payment & Settlement Systems\n- IEEE 1588 Precision Time Protocol & 3GPP Cellular Backhaul Architecture\n\n#TheHiddenSystems #Technology #ComputerScience #Internet #Engineering",
+  "chapters": [
+    {
+      "time": "00:00",
+      "title": "The Silence at 00:00:00"
+    },
+    {
+      "time": "01:45",
+      "title": "Hour 1: The Signaling Storm"
+    },
+    {
+      "time": "03:30",
+      "title": "Hour 3: The Ghost Cash Register"
+    },
+    {
+      "time": "05:15",
+      "title": "Hour 6: The Blind Giants of Commerce"
+    },
+    {
+      "time": "07:05",
+      "title": "Hour 12: Islanding the Power Grid"
+    },
+    {
+      "time": "08:50",
+      "title": "Hour 18: The Analog Renaissance"
+    },
+    {
+      "time": "10:35",
+      "title": "Hour 24: The Thundering Herd Problem"
+    },
+    {
+      "time": "12:15",
+      "title": "Conclusion: The Fragility of Civilization"
+    }
+  ],
+  "tags": [
+    "the hidden systems",
+    "what if internet went down",
+    "internet outage simulation",
+    "bgp explained",
+    "subsea cables",
+    "computer science documentary",
+    "thundering herd problem",
+    "dns root servers",
+    "fedwire",
+    "hidden internet infrastructure",
+    "technology explainer",
+    "2d animated documentary"
+  ],
+  "hashtags": [
+    "#TheHiddenSystems",
+    "#Technology",
+    "#ComputerScience",
+    "#Infrastructure"
+  ],
+  "pinned_comment": "If the internet vanished tomorrow morning, what is the single most important analog item you would reach for first? Let us know in the comments below.",
+  "source_references": [
+    "TeleGeography Global Submarine Cable Map (2024)",
+    "RFC 4271 BGP-4 Protocol Specification",
+    "Federal Reserve Fedwire Operations Manual",
+    "IANA Root Zone Management Records"
+  ]
+}

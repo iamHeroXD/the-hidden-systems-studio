@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0B0F17" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="#0B0F17" />
+  <circle cx="640" cy="360" r="320" fill="url(#glow1)" />
+  
+  <!-- Massive Severed Glowing Cable -->
+  <path d="M 100 480 Q 450 360 580 360" fill="none" stroke="#06B6D4" stroke-width="24" stroke-linecap="round" />
+  <path d="M 700 360 Q 830 360 1180 480" fill="none" stroke="#EF4444" stroke-width="24" stroke-linecap="round" />
+  
+  <!-- Sparking core -->
+  <circle cx="580" cy="360" r="36" fill="#ffffff" />
+  <circle cx="700" cy="360" r="36" fill="#F59E0B" />
+  
+  <!-- High Impact Typography -->
+  <rect x="120" y="80" width="600" height="110" rx="12" fill="#0f172a" stroke="#F59E0B" stroke-width="4" />
+  <text x="420" y="155" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-weight="900" font-size="64" letter-spacing="4">24 HOURS DARK</text>
+</svg>
