@@ -102,7 +102,9 @@ def get_live_progress():
     prods = get_all_productions()
     if not prods:
         return {"status": "idle", "progress_pct": 0, "eta_sec": 0, "elapsed_sec": 0, "stage": "Standby"}
-    running = next((p for p in prods if p.get("status") == "running"), prods[0])
+    running = next((p for p in prods if p.get("status") == "running"), None)
+    if not running:
+        running = next((p for p in prods if p.get("status") in ["awaiting_approval", "completed"]), prods[0])
     live = running.get("live_progress") or {}
     return {
         "id": running.get("id"),
