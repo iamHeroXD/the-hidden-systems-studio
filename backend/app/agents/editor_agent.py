@@ -99,6 +99,7 @@ class EditorAgent:
             "-c:v", "copy",
             "-c:a", "aac",
             "-b:a", "192k",
+            "-movflags", "+faststart",
             "-shortest",
             str(final_mp4)
         ]
@@ -112,19 +113,21 @@ class EditorAgent:
                 "-i", str(narration_audio_path),
                 "-c:v", "copy",
                 "-c:a", "aac",
+                "-movflags", "+faststart",
                 "-shortest",
                 str(final_mp4)
             ]
             subprocess.run(cmd_fallback, capture_output=True, timeout=120)
 
-        # 6. Generate lightweight 720p preview
+        # 6. Generate lightweight 720p preview with +faststart for 0-buffer instant playback
         cmd_prev = [
             "ffmpeg", "-y",
             "-i", str(final_mp4),
             "-vf", "scale=1280:720",
             "-c:v", "libx264",
             "-preset", "ultrafast",
-            "-crf", "26",
+            "-crf", "24",
+            "-movflags", "+faststart",
             "-c:a", "copy",
             str(preview_mp4)
         ]

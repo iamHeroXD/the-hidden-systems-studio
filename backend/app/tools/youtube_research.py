@@ -20,7 +20,7 @@ class YouTubeResearch:
                 "--skip-download",
                 "--no-warnings"
             ]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=2)
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=6)
             if result.returncode == 0 and result.stdout.strip():
                 for line in result.stdout.strip().split("\n"):
                     if not line.strip():

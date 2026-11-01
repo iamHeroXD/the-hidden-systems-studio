@@ -79,32 +79,56 @@ class PackagingAgent:
             png_file = output_dir / f"{fname}.png"
             svg_file.write_text(svg_code, encoding="utf-8")
 
-            # Render 1280x720 thumbnail PNG directly via Pillow
-            from PIL import Image, ImageDraw
-            t_img = Image.new("RGB", (1280, 720), color="#080B11")
+            # Render 1280x720 thumbnail PNG directly via Pillow with bold TrueType fonts
+            from PIL import Image, ImageDraw, ImageFont
+            try:
+                font_thumb_lg = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", 46)
+                font_thumb_md = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", 34)
+                font_thumb_mono = ImageFont.truetype("C:/Windows/Fonts/consola.ttf", 22)
+            except Exception:
+                font_thumb_lg = font_thumb_md = font_thumb_mono = ImageFont.load_default()
+
+            t_img = Image.new("RGB", (1280, 720), color="#04060A")
             t_draw = ImageDraw.Draw(t_img)
+
+            # Draw background grid & atmospheric gradient
+            for gx in range(0, 1280, 80):
+                t_draw.line([(gx, 0), (gx, 720)], fill=(15, 20, 28), width=1)
+            for gy in range(0, 720, 60):
+                t_draw.line([(0, gy), (1280, gy)], fill=(15, 20, 28), width=1)
             
             # Draw distinctive thumbnail art
             if idx == 1:
-                t_draw.line([(100, 480), (580, 360)], fill=p["accent_teal"], width=20)
-                t_draw.line([(700, 360), (1180, 480)], fill=p["accent_red"], width=20)
-                t_draw.ellipse([540, 320, 620, 400], fill="#FFFFFF")
-                t_draw.ellipse([660, 320, 740, 400], fill=p["accent_amber"])
-                short_t = topic_title[:32].upper()
-                t_draw.rounded_rectangle([180, 80, 1100, 200], radius=16, fill="#0F172A", outline=p["accent_amber"], width=5)
-                t_draw.text((240, 115), f"THE HIDDEN SYSTEMS: {short_t}", fill="#FFFFFF")
+                t_draw.line([(100, 520), (580, 400)], fill=p["accent_teal"], width=24)
+                t_draw.line([(700, 400), (1180, 520)], fill=p["accent_red"], width=24)
+                t_draw.ellipse([540, 360, 620, 440], fill="#FFFFFF")
+                t_draw.ellipse([660, 360, 740, 440], fill=p["accent_amber"])
+                
+                # High-CTR Header Badge
+                t_draw.rounded_rectangle([100, 60, 1180, 170], radius=16, fill="#0B0F19", outline=p["accent_amber"], width=4)
+                short_t = topic_title[:30].upper()
+                t_draw.text((640, 100), f"THE HIDDEN SYSTEMS", fill=p["accent_amber"], font=font_thumb_mono, anchor="mm")
+                t_draw.text((640, 135), short_t, fill="#FFFFFF", font=font_thumb_md, anchor="mm")
+
+                # Warning Pill Bottom
+                t_draw.rounded_rectangle([420, 580, 860, 640], radius=12, fill="#EF4444")
+                t_draw.text((640, 610), "ZERO PACKETS REMAINING", fill="#FFFFFF", font=font_thumb_mono, anchor="mm")
+
             elif idx == 2:
-                short_t = topic_title[:28].upper()
-                t_draw.ellipse([360, 100, 920, 660], outline=p["accent_amber"], width=4)
-                t_draw.polygon([(640, 180), (760, 380), (520, 380)], fill=p["accent_red"], outline="#FFFFFF")
-                t_draw.rounded_rectangle([200, 460, 1080, 620], radius=20, fill="#030712", outline=p["line_ink"], width=6)
-                t_draw.text((320, 520), f"EXPOSED: {short_t}", fill=p["accent_amber"])
+                t_draw.ellipse([340, 80, 940, 680], outline=p["accent_amber"], width=5)
+                t_draw.polygon([(640, 180), (780, 420), (500, 420)], fill=p["accent_red"], outline="#FFFFFF", width=4)
+                t_draw.rounded_rectangle([120, 480, 1160, 620], radius=18, fill="#040711", outline=p["line_ink"], width=5)
+                short_t = topic_title[:26].upper()
+                t_draw.text((640, 525), f"EXPOSED: {short_t}", fill=p["accent_amber"], font=font_thumb_lg, anchor="mm")
+                t_draw.text((640, 575), "WHAT ACTUALLY HAPPENS UNDER THE SURFACE", fill="#E2E8F0", font=font_thumb_mono, anchor="mm")
             else:
+                t_draw.line([(0, 540), (1280, 540)], fill=p["accent_teal"], width=14)
+                t_draw.ellipse([520, 240, 760, 480], fill="#0F172A", outline=p["accent_gold"], width=6)
+                t_draw.ellipse([580, 300, 700, 420], fill=p["accent_gold"])
+                t_draw.rounded_rectangle([180, 60, 1100, 180], radius=16, fill=p["accent_amber"])
                 short_t = topic_title[:28].upper()
-                t_draw.line([(0, 540), (1280, 540)], fill=p["accent_teal"], width=12)
-                t_draw.ellipse([540, 260, 740, 460], fill="#1E293B", outline=p["accent_gold"], width=6)
-                t_draw.rounded_rectangle([280, 80, 1000, 200], radius=16, fill=p["accent_amber"])
-                t_draw.text((360, 120), f"CLASSIFIED: {short_t}", fill="#000000")
+                t_draw.text((640, 100), "CLASSIFIED INVESTIGATION", fill="#000000", font=font_thumb_mono, anchor="mm")
+                t_draw.text((640, 140), short_t, fill="#000000", font=font_thumb_lg, anchor="mm")
 
             t_img.save(str(png_file), "PNG")
 

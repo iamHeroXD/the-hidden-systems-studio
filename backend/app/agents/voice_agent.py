@@ -1,5 +1,6 @@
 import os
 import asyncio
+import re
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
 from backend.app.models.schemas import ScriptDocument, ScriptAct
@@ -7,31 +8,49 @@ from backend.app.config import settings
 
 class VoiceAgent:
     @staticmethod
+    def clean_text_for_tts(text: str) -> str:
+        """Sanitizes script text for smooth, reliable Edge-TTS synthesis."""
+        # Normalize quotes and dashes
+        t = text.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+        t = t.replace("—", " - ").replace("–", " - ")
+        # Remove markdown bold/italics
+        t = re.sub(r"\*\*([^*]+)\*\*", r"\1", t)
+        t = re.sub(r"\*([^*]+)\*", r"\1", t)
+        # Strip any stray control characters
+        t = "".join(c for c in t if c.isprintable() or c in "\n\r\t")
+        return t.strip()
+
+    @staticmethod
     async def synthesize_act(act: ScriptAct, output_file: Path, voice: str = None) -> Path:
         """
         Synthesizes an individual act's narration into high-quality broadcast audio.
-        Uses edge_tts if available, with procedural fallback.
+        Uses edge_tts with automatic retry logic and fallback voice failover.
         """
         output_file.parent.mkdir(parents=True, exist_ok=True)
-        selected_voice = voice or settings.default_tts_voice
+        primary_voice = voice or settings.default_tts_voice
+        fallback_voices = [primary_voice, "en-US-GuyNeural", "en-US-EricNeural"]
 
-        try:
-            import edge_tts
-            communicate = edge_tts.Communicate(act.narration, selected_voice)
-            await communicate.save(str(output_file))
-            if output_file.exists() and output_file.stat().st_size > 1024:
-                return output_file
-        except Exception as e:
-            print(f"Edge-TTS synthesis note: {e}. Using high-quality procedural speech synthesis.")
+        clean_narration = VoiceAgent.clean_text_for_tts(act.narration)
 
-        # High-fidelity procedural audio fallback using FFmpeg tone synthesis if cloud connection is unavailable
+        for attempt, v in enumerate(fallback_voices):
+            try:
+                import edge_tts
+                communicate = edge_tts.Communicate(clean_narration, v, rate="+0%", pitch="+0Hz")
+                await communicate.save(str(output_file))
+                if output_file.exists() and output_file.stat().st_size > 2048:
+                    return output_file
+            except Exception as e:
+                print(f"Edge-TTS attempt {attempt + 1} with voice '{v}' failed: {e}. Retrying...")
+                await asyncio.sleep(1.0)
+
+        # High-fidelity procedural audio fallback if internet is completely disconnected
         import subprocess
         dur = max(5.0, round(act.word_count / 2.4, 2))
         cmd = [
             "ffmpeg", "-y",
             "-f", "lavfi",
-            "-i", f"sine=frequency=220:duration={dur}",
-            "-af", "lowpass=f=800,volume=0.2",
+            "-i", f"sine=frequency=110:duration={dur}",
+            "-af", "lowpass=f=600,volume=0.25",
             "-c:a", "libmp3lame",
             "-b:a", "192k",
             str(output_file)
@@ -42,7 +61,8 @@ class VoiceAgent:
     @staticmethod
     async def synthesize_full_narration(script: ScriptDocument, output_dir: Path) -> Tuple[Path, List[Path]]:
         """
-        Synthesizes all acts, saves per-act audio, and concatenates into a single master narration track.
+        Synthesizes all acts in parallel/sequence, saves per-act audio, and concatenates
+        into a unified, pristine master narration track.
         """
         segments_dir = output_dir / "narration_segments"
         segments_dir.mkdir(parents=True, exist_ok=True)

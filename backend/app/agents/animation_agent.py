@@ -141,7 +141,13 @@ export default makeScene2D(function* (view) {
             "-y",
             "-loop", "1",
             "-i", str(render_input),
-            "-vf", f"{vf},eq=contrast=1.06:brightness=0.01:saturation=1.12,format=yuv420p",
+            "-vf", (
+                f"{vf},"
+                f"noise=alls=10:allf=t+u,"
+                f"drawbox=x=0:y='mod(t*220,ih)':w=iw:h=2:color=0xEF4444@0.6:t=fill,"
+                f"drawbox=x='mod(t*650,iw)':y='ih/2':w=32:h=5:color=0x06B6D4@0.85:t=fill,"
+                f"eq=contrast=1.06:brightness=0.01:saturation=1.12,format=yuv420p"
+            ),
             "-t", f"{dur:.2f}",
             "-r", str(settings.video_fps),
             "-c:v", "libx264",
