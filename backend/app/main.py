@@ -97,6 +97,26 @@ def override_topic(req: TopicOverrideRequest):
 
 # --- Production Studio Endpoints ---
 
+@app.get("/api/progress")
+def get_live_progress():
+    prods = get_all_productions()
+    if not prods:
+        return {"status": "idle", "progress_pct": 0, "eta_sec": 0, "elapsed_sec": 0, "stage": "Standby"}
+    running = next((p for p in prods if p.get("status") == "running"), prods[0])
+    live = running.get("live_progress") or {}
+    return {
+        "id": running.get("id"),
+        "title": running.get("topic_title"),
+        "status": running.get("status"),
+        "progress_pct": running.get("progress_pct", 0),
+        "stage_index": running.get("current_stage_index", 0),
+        "total_stages": len(running.get("stages", [])),
+        "elapsed_sec": running.get("elapsed_sec", 0),
+        "eta_sec": running.get("eta_sec", 0),
+        "live": live,
+        "stages": running.get("stages", [])
+    }
+
 @app.get("/api/productions")
 def get_productions():
     return get_all_productions()

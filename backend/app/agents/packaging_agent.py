@@ -90,18 +90,21 @@ class PackagingAgent:
                 t_draw.line([(700, 360), (1180, 480)], fill=p["accent_red"], width=20)
                 t_draw.ellipse([540, 320, 620, 400], fill="#FFFFFF")
                 t_draw.ellipse([660, 320, 740, 400], fill=p["accent_amber"])
+                short_t = topic_title[:32].upper()
                 t_draw.rounded_rectangle([180, 80, 1100, 200], radius=16, fill="#0F172A", outline=p["accent_amber"], width=5)
-                t_draw.text((240, 115), "24 HOURS DARK: THE INTERNET BLACKOUT", fill="#FFFFFF")
+                t_draw.text((240, 115), f"THE HIDDEN SYSTEMS: {short_t}", fill="#FFFFFF")
             elif idx == 2:
+                short_t = topic_title[:28].upper()
                 t_draw.ellipse([360, 100, 920, 660], outline=p["accent_amber"], width=4)
                 t_draw.polygon([(640, 180), (760, 380), (520, 380)], fill=p["accent_red"], outline="#FFFFFF")
                 t_draw.rounded_rectangle([200, 460, 1080, 620], radius=20, fill="#030712", outline=p["line_ink"], width=6)
-                t_draw.text((320, 520), "THE DAY THE MACHINE STOPS", fill=p["accent_amber"])
+                t_draw.text((320, 520), f"EXPOSED: {short_t}", fill=p["accent_amber"])
             else:
+                short_t = topic_title[:28].upper()
                 t_draw.line([(0, 540), (1280, 540)], fill=p["accent_teal"], width=12)
                 t_draw.ellipse([540, 260, 740, 460], fill="#1E293B", outline=p["accent_gold"], width=6)
                 t_draw.rounded_rectangle([280, 80, 1000, 200], radius=16, fill=p["accent_amber"])
-                t_draw.text((360, 120), "ZERO PACKETS REMAINING", fill="#000000")
+                t_draw.text((360, 120), f"CLASSIFIED: {short_t}", fill="#000000")
 
             t_img.save(str(png_file), "PNG")
 
@@ -118,50 +121,43 @@ class PackagingAgent:
 
     @staticmethod
     def generate_metadata(script: ScriptDocument) -> VideoMetadata:
+        title = script.title
         title_options = [
-            "What If The Entire Internet Disappeared For 24 Hours?",
-            "The Day The Global Network Died: An Hour-By-Hour Simulation",
-            "Why Civilization Cannot Survive 24 Hours Without Subsea Cables"
+            f"{title}",
+            f"The Hidden Reality of {title}: Explained",
+            f"Why Nobody Talks About {title} (Until Now)"
         ]
 
-        chapters = [
-            {"time": "00:00", "title": "The Silence at 00:00:00"},
-            {"time": "01:45", "title": "Hour 1: The Signaling Storm"},
-            {"time": "03:30", "title": "Hour 3: The Ghost Cash Register"},
-            {"time": "05:15", "title": "Hour 6: The Blind Giants of Commerce"},
-            {"time": "07:05", "title": "Hour 12: Islanding the Power Grid"},
-            {"time": "08:50", "title": "Hour 18: The Analog Renaissance"},
-            {"time": "10:35", "title": "Hour 24: The Thundering Herd Problem"},
-            {"time": "12:15", "title": "Conclusion: The Fragility of Civilization"}
-        ]
+        chapters = []
+        cum_sec = 0
+        for act in script.acts:
+            m = int(cum_sec // 60)
+            s = int(cum_sec % 60)
+            chapters.append({"time": f"{m:02d}:{s:02d}", "title": act.title})
+            cum_sec += int(act.word_count / 2.4)
 
         description = (
-            "Right now, over 99% of all intercontinental communication rides on an invisible lattice of subsea fiber optic cables "
-            "and Border Gateway Protocol routing tables written in the 1980s. But what happens if that invisible machine stops?\n\n"
-            "In this documentary, The Hidden Systems breaks down the hour-by-hour collapse of modern infrastructure if the entire internet "
-            "disappeared for twenty-four hours: from the cellular signaling storms that overwhelm local radio towers, to frozen supermarket "
-            "cash registers, grounded international aviation, and the terrifying 'Thundering Herd' reboot surge.\n\n"
+            f"Welcome to THE HIDDEN SYSTEMS.\n\n"
+            f"In this documentary, we investigate: {title}.\n\n"
+            f"{script.full_text[:400]}...\n\n"
             "TIMESTAMPS:\n" +
             "\n".join([f"{c['time']} - {c['title']}" for c in chapters]) +
-            "\n\nSOURCES & VERIFIED RESEARCH:\n"
-            "- TeleGeography Global Submarine Telecoms Industry Report\n"
-            "- RFC 4271: A Border Gateway Protocol 4 (BGP-4) Specification\n"
-            "- Bank for International Settlements (BIS) Payment & Settlement Systems\n"
-            "- IEEE 1588 Precision Time Protocol & 3GPP Cellular Backhaul Architecture\n\n"
-            "#TheHiddenSystems #Technology #ComputerScience #Internet #Engineering"
+            "\n\nSOURCES & VERIFIED RESEARCH:\n" +
+            "\n".join([f"- {cite}" for act in script.acts for cite in act.factual_citations[:2]]) +
+            "\n\n#TheHiddenSystems #Technology #ComputerScience #Engineering #Documentary"
         )
 
+        clean_slug = title.lower().replace("what if ", "").replace("the ", "")
         tags = [
-            "the hidden systems", "what if internet went down", "internet outage simulation",
-            "bgp explained", "subsea cables", "computer science documentary",
-            "thundering herd problem", "dns root servers", "fedwire", "hidden internet infrastructure",
-            "technology explainer", "2d animated documentary"
+            "the hidden systems", title.lower(), clean_slug,
+            "computer science documentary", "hidden infrastructure",
+            "technology explainer", "2d animated documentary", "engineering explained"
         ]
 
-        hashtags = ["#TheHiddenSystems", "#Technology", "#ComputerScience", "#Infrastructure"]
+        hashtags = ["#TheHiddenSystems", "#Technology", "#ComputerScience", "#Documentary"]
         pinned_comment = (
-            "If the internet vanished tomorrow morning, what is the single most important analog item you would reach for first? "
-            "Let us know in the comments below."
+            f"What was the most surprising revelation in this breakdown of {title}? "
+            "Drop your thoughts below."
         )
 
         return VideoMetadata(
@@ -172,10 +168,5 @@ class PackagingAgent:
             tags=tags,
             hashtags=hashtags,
             pinned_comment=pinned_comment,
-            source_references=[
-                "TeleGeography Global Submarine Cable Map (2024)",
-                "RFC 4271 BGP-4 Protocol Specification",
-                "Federal Reserve Fedwire Operations Manual",
-                "IANA Root Zone Management Records"
-            ]
+            source_references=[cite for act in script.acts for cite in act.factual_citations]
         )

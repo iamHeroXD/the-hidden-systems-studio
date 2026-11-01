@@ -1,7 +1,8 @@
 import os
 import subprocess
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple, Callable, Optional
+from concurrent.futures import ThreadPoolExecutor
 from backend.app.models.schemas import StoryboardScene
 from backend.app.config import settings
 
@@ -15,7 +16,6 @@ class AnimationAgent:
         src_dir = project_dir / "src"
         src_dir.mkdir(parents=True, exist_ok=True)
 
-        # Write package.json
         pkg_json = project_dir / "package.json"
         if not pkg_json.exists():
             pkg_json.write_text("""{
@@ -38,7 +38,6 @@ class AnimationAgent:
 }
 """, encoding="utf-8")
 
-        # Write project.ts
         project_ts = src_dir / "project.ts"
         project_ts.write_text("""import {makeProject} from '@motion-canvas/core';
 import documentaryScene from './scenes/documentary?scene';
@@ -48,7 +47,6 @@ export default makeProject({
 });
 """, encoding="utf-8")
 
-        # Write scenes/documentary.tsx
         scenes_dir = src_dir / "scenes"
         scenes_dir.mkdir(parents=True, exist_ok=True)
         doc_scene = scenes_dir / "documentary.tsx"
@@ -65,7 +63,7 @@ export default makeScene2D(function* (view) {
       <Rect
         width={1920}
         height={1080}
-        fill={'#0B0F17'}
+        fill={'#050508'}
       />
       <Rect
         ref={filament}
@@ -113,29 +111,29 @@ export default makeScene2D(function* (view) {
 
         # Select camera movement filter
         cam = scene.camera_movement.lower()
-        if "zoom in" in cam or "push-in" in cam:
-            # Smooth cinematic slow zoom from 1.0x to 1.15x
+        if "zoom in" in cam or "push-in" in cam or "zoom" in cam:
+            # Smooth cinematic slow zoom from 1.0x to 1.14x
             vf = (
-                f"zoompan=z='min(zoom+0.0008,1.15)':d={num_frames}:"
+                f"zoompan=z='min(zoom+0.0006,1.14)':d={num_frames}:"
                 f"x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s={settings.video_width}x{settings.video_height}:fps={settings.video_fps}"
             )
-        elif "pan right" in cam:
+        elif "pan right" in cam or "pan" in cam:
             # Slow cinematic drift from left to right
             vf = (
-                f"zoompan=z=1.08:d={num_frames}:"
+                f"zoompan=z=1.07:d={num_frames}:"
                 f"x='(on/{num_frames})*(iw-iw/zoom)':y='ih/2-(ih/zoom/2)':s={settings.video_width}x{settings.video_height}:fps={settings.video_fps}"
             )
-        elif "pull-back" in cam or "outward zoom" in cam:
+        elif "pull-back" in cam or "outward" in cam:
             # Gentle pull-back zoom out
             vf = (
-                f"zoompan=z='if(lte(zoom,1.0),1.15,max(1.0,zoom-0.0008))':d={num_frames}:"
+                f"zoompan=z='if(lte(zoom,1.0),1.14,max(1.0,zoom-0.0006))':d={num_frames}:"
                 f"x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s={settings.video_width}x{settings.video_height}:fps={settings.video_fps}"
             )
         else:
             # Subtle organic parallax float
             vf = (
                 f"zoompan=z=1.04:d={num_frames}:"
-                f"x='(iw/2-(iw/zoom/2)) + sin(on/15)*6':y='(ih/2-(ih/zoom/2)) + cos(on/20)*4':s={settings.video_width}x{settings.video_height}:fps={settings.video_fps}"
+                f"x='(iw/2-(iw/zoom/2)) + sin(on/16)*6':y='(ih/2-(ih/zoom/2)) + cos(on/22)*4':s={settings.video_width}x{settings.video_height}:fps={settings.video_fps}"
             )
 
         cmd = [
@@ -160,3 +158,42 @@ export default makeScene2D(function* (view) {
         scene.rendered = True
         scene.rendered_video_path = str(output_mp4)
         return str(output_mp4)
+
+    @staticmethod
+    def render_all_scenes_parallel(
+        scenes: List[StoryboardScene],
+        illustrations_dir: Path,
+        rendered_dir: Path,
+        progress_callback: Optional[Callable[[int, int, str], None]] = None
+    ) -> List[str]:
+        """
+        Renders all 40 scenes in parallel using multi-threaded FFmpeg processes.
+        Provides live progress callbacks for real-time ETA calculation.
+        """
+        rendered_dir.mkdir(parents=True, exist_ok=True)
+        total = len(scenes)
+        completed = 0
+        video_paths = [None] * total
+
+        def _worker(item: Tuple[int, StoryboardScene]):
+            nonlocal completed
+            idx, s = item
+            png_file = illustrations_dir / f"scene_{s.scene_id:02d}.png"
+            if not png_file.exists():
+                from backend.app.agents.visual_agent import IllustrationAgent
+                IllustrationAgent.generate_scene_png(s, png_file)
+            
+            out_mp4 = rendered_dir / f"scene_{s.scene_id:02d}.mp4"
+            AnimationAgent.render_scene_to_video(s, png_file, out_mp4)
+            completed += 1
+            if progress_callback:
+                progress_callback(completed, total, f"Animated scene {completed}/{total} ({s.camera_movement})")
+            return idx, str(out_mp4)
+
+        # 4 parallel FFmpeg encoding threads
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            results = executor.map(_worker, enumerate(scenes))
+            for idx, path in results:
+                video_paths[idx] = path
+
+        return video_paths

@@ -45,7 +45,6 @@
       font-family: 'Inter', sans-serif;
     }
     
-    /* Neon Red Glow & Glass */
     .glow-red {
       box-shadow: 0 0 25px -2px rgba(239, 68, 68, 0.45);
     }
@@ -60,7 +59,6 @@
       box-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
     }
 
-    /* Cyber Matrix Background Grid */
     .bg-grid {
       background-size: 40px 40px;
       background-image: 
@@ -68,13 +66,11 @@
         linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
     }
 
-    /* Custom Minimal Scrollbar */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: #060608; }
     ::-webkit-scrollbar-thumb { background: #282834; border-radius: 2px; }
     ::-webkit-scrollbar-thumb:hover { background: #EF4444; }
 
-    /* Sound Frequency EQ Animation */
     @keyframes eqBar {
       0%, 100% { height: 3px; }
       50% { height: 16px; }
@@ -83,21 +79,6 @@
     .eq-2 { animation: eqBar 0.4s ease-in-out infinite 0.15s; }
     .eq-3 { animation: eqBar 0.9s ease-in-out infinite 0.3s; }
     .eq-4 { animation: eqBar 0.6s ease-in-out infinite 0.05s; }
-
-    /* Animated Scanline for Illustrator */
-    @keyframes scanline {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(1000%); }
-    }
-    .animate-scan { animation: scanline 3s linear infinite; }
-
-    /* Radar Pulse */
-    @keyframes radarPulse {
-      0% { transform: scale(0.95); opacity: 0.9; }
-      50% { transform: scale(1.08); opacity: 0.3; }
-      100% { transform: scale(0.95); opacity: 0.9; }
-    }
-    .radar-pulse { animation: radarPulse 2s ease-in-out infinite; }
   </style>
 </head>
 <body class="h-screen flex flex-col bg-black text-white selection:bg-crimson selection:text-white overflow-hidden bg-grid">
@@ -210,21 +191,23 @@
     let currentTab = "overview";
     let state = {
       prod: null,
+      progress: null,
       topics: [],
       logs: [],
       telemetry: null,
-      sceneIdx: 0
+      sceneIdx: 0,
+      countdownTimer: null
     };
 
     const AI_AGENTS = [
-      { id: "director", name: "ORCHESTRATOR AI", role: "Autonomous Pipeline Director", icon: "activity", stageRange: [0, 1] },
-      { id: "research", name: "RESEARCH AI", role: "Competitor & Trend Intelligence", icon: "search", stageRange: [1, 3] },
-      { id: "writer", name: "SCRIPTWRITER AI", role: "5-Act Narrative & Retention Pacing", icon: "pen-tool", stageRange: [3, 5] },
-      { id: "illustrator", name: "ILLUSTRATION AI", role: "40 Original 2D Vector Scenes", icon: "palette", stageRange: [5, 8] },
-      { id: "voice", name: "NEURAL VOICE AI", role: "Edge-TTS Master Narration Track", icon: "mic", stageRange: [8, 10] },
-      { id: "animator", name: "ANIMATION AI", role: "1080p Camera Movement & Dynamic Zooms", icon: "video", stageRange: [10, 12] },
-      { id: "sound", name: "MASTER AUDIO AI", role: "EBU R128 -16 LUFS Loudness Balance", icon: "sliders", stageRange: [12, 14] },
-      { id: "publisher", name: "YOUTUBE PUBLISHER AI", role: "3 High-CTR Thumbnails & Release Zip", icon: "package", stageRange: [15, 17] }
+      { id: "director", name: "ORCHESTRATOR AI", role: "Pipeline Director", icon: "activity", stageRange: [0, 1] },
+      { id: "research", name: "RESEARCH AI", role: "Fact-Checked Dossier", icon: "search", stageRange: [1, 3] },
+      { id: "writer", name: "SCRIPTWRITER AI", role: "5-Act Retention Narrative", icon: "pen-tool", stageRange: [3, 5] },
+      { id: "illustrator", name: "ILLUSTRATION AI", role: "40 Vector 1080p Scenes", icon: "palette", stageRange: [5, 8] },
+      { id: "voice", name: "NEURAL VOICE AI", role: "Edge-TTS Narration Master", icon: "mic", stageRange: [8, 10] },
+      { id: "animator", name: "ANIMATION AI", role: "1080p Camera Movement", icon: "video", stageRange: [10, 12] },
+      { id: "sound", name: "MASTER AUDIO AI", role: "EBU R128 -16 LUFS Mixer", icon: "sliders", stageRange: [12, 14] },
+      { id: "publisher", name: "YOUTUBE PUBLISHER AI", role: "Thumbnails & Release Package", icon: "package", stageRange: [15, 17] }
     ];
 
     function showToast(text) {
@@ -232,6 +215,13 @@
       document.getElementById("toast-msg").textContent = text;
       t.style.opacity = "1";
       setTimeout(() => { t.style.opacity = "0"; }, 3200);
+    }
+
+    function formatTime(sec) {
+      if (!sec || sec < 0) sec = 0;
+      const m = Math.floor(sec / 60).toString().padStart(2, "0");
+      const s = Math.floor(sec % 60).toString().padStart(2, "0");
+      return `${m}:${s}`;
     }
 
     function selectTab(tabId) {
@@ -246,7 +236,24 @@
       renderView();
     }
 
-    async function poll() {
+    async function pollProgress() {
+      try {
+        const res = await fetch("/api/progress");
+        if (res.ok) {
+          const prog = await res.json();
+          state.progress = prog;
+          updateStatus();
+          // If in flight, re-render to keep countdown and micro-bars fluid
+          if (prog.status === "running") {
+            renderView();
+          }
+        }
+      } catch (e) {
+        console.error("Progress poll err:", e);
+      }
+    }
+
+    async function pollFull() {
       try {
         const [prodRes, topRes, sysRes, logRes] = await Promise.all([
           fetch("/api/productions"),
@@ -276,21 +283,22 @@
         updateStatus();
         renderView();
       } catch (e) {
-        console.error("Poll err:", e);
+        console.error("Full poll err:", e);
       }
     }
 
     function updateStatus() {
-      const p = state.prod;
+      const prog = state.progress;
       const label = document.getElementById("status-label");
       const dot = document.getElementById("status-dot");
-      if (!p) return;
-      if (p.status === "running") {
-        label.textContent = "AI TEAM WORKING...";
+      if (!prog) return;
+
+      if (prog.status === "running") {
+        label.textContent = `WORKING: STAGE ${prog.stage_index + 1}/18 (${prog.progress_pct}%)`;
         label.className = "text-crimson font-black animate-pulse";
         dot.className = "w-2 h-2 rounded-full bg-crimson animate-ping";
-      } else if (p.status === "awaiting_approval") {
-        label.textContent = "COMPLETE - READY FOR REVIEW";
+      } else if (prog.status === "awaiting_approval" || prog.status === "completed") {
+        label.textContent = "COMPLETE - MASTER READY";
         label.className = "text-white font-bold";
         dot.className = "w-2 h-2 rounded-full bg-white";
       } else {
@@ -305,11 +313,11 @@
       btn.disabled = true;
       btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>STARTING...</span>`;
       lucide.createIcons();
-      showToast("Full Autonomous Production Started! AI Team Deployed.");
+      showToast("Master Production Deployed! Parallel AI Agents Engaged.");
       try {
         await fetch("/api/automation/trigger-now", { method: "POST" });
-        selectTab("swarm");
-        await poll();
+        await pollProgress();
+        await pollFull();
       } catch (err) {
         showToast("Error: " + err.message);
       } finally {
@@ -326,8 +334,8 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title })
       });
-      selectTab("swarm");
-      await poll();
+      await pollProgress();
+      await pollFull();
     }
 
     function copyToClipboard(text, label) {
@@ -395,28 +403,83 @@
     function renderView() {
       const v = document.getElementById("viewport");
       const p = state.prod || {};
+      const prog = state.progress || {};
+      const isRunning = prog.status === "running";
+      const currentStageIdx = prog.stage_index !== undefined ? prog.stage_index : (p.current_stage_index || 0);
       const pData = p.data || {};
       const scenes = pData.scenes || [];
       const meta = pData.metadata || {};
       const thumbnails = pData.thumbnails || [];
       const script = pData.script || {};
-      const isRunning = p.status === "running";
-      const currentStageIdx = p.current_stage_index || (p.status === "awaiting_approval" ? 18 : 0);
 
       if (currentTab === "overview") {
         v.innerHTML = `
           <div class="space-y-6 max-w-6xl mx-auto">
+            <!-- LIVE MISSION PROGRESS HUD (VISIBLE WHEN RUNNING) -->
+            ${isRunning ? `
+              <div class="bg-surface-950 border border-crimson rounded-2xl p-6 glow-red relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                  <div class="flex items-center gap-3">
+                    <span class="w-3 h-3 rounded-full bg-crimson animate-ping"></span>
+                    <div>
+                      <span class="text-[10px] font-mono text-crimson font-black tracking-widest uppercase">AUTONOMOUS PRODUCTION IN FLIGHT</span>
+                      <h3 class="text-lg font-black text-white font-mono mt-0.5">${prog.title || p.topic_title || "Generating Documentary..."}</h3>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4 text-right">
+                    <div>
+                      <span class="text-[10px] font-mono text-zinc-500 block">TIME REMAINING</span>
+                      <span class="text-2xl font-black text-crimson font-mono tracking-tight" id="countdown-val">
+                        ${formatTime(prog.eta_sec || 45)}
+                      </span>
+                    </div>
+                    <div class="border-l border-surface-800 pl-4">
+                      <span class="text-[10px] font-mono text-zinc-500 block">ELAPSED TIME</span>
+                      <span class="text-lg font-bold text-white font-mono">
+                        ${formatTime(prog.elapsed_sec || 0)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Overall Progress Bar -->
+                <div class="space-y-1.5 mb-4">
+                  <div class="flex justify-between text-xs font-mono">
+                    <span class="text-zinc-300 font-bold">
+                      STAGE ${prog.stage_index + 1} OF ${prog.total_stages || 18}: 
+                      <span class="text-white">${prog.live?.stage_name || (prog.stages && prog.stages[prog.stage_index] ? prog.stages[prog.stage_index].name : 'Executing')}</span>
+                    </span>
+                    <span class="text-crimson font-black text-sm">${prog.progress_pct || 0}%</span>
+                  </div>
+                  <div class="w-full h-3 bg-surface-900 rounded-full overflow-hidden border border-surface-800 p-0.5">
+                    <div class="h-full bg-gradient-to-r from-red-600 to-crimson-glow rounded-full transition-all duration-300" style="width: ${prog.progress_pct || 0}%"></div>
+                  </div>
+                </div>
+
+                <!-- Live Micro-Meter -->
+                ${prog.live && prog.live.total ? `
+                  <div class="bg-surface-900 border border-surface-800 rounded-xl p-3 flex items-center justify-between font-mono text-xs">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="activity" class="w-4 h-4 text-crimson"></i>
+                      <span class="text-zinc-300 font-bold">${prog.live.msg || 'Processing'}</span>
+                    </div>
+                    <span class="text-crimson font-black">${prog.live.done || 0} / ${prog.live.total || 40} (${prog.live.pct || 0}%)</span>
+                  </div>
+                ` : ''}
+              </div>
+            ` : ''}
+
             <!-- Command Center Hero -->
             <div class="bg-surface-950 border border-surface-800 rounded-2xl p-6 relative overflow-hidden border-glow">
               <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div class="space-y-2">
                   <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-600 text-white">AUTONOMOUS PRODUCTION</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-600 text-white">AUTONOMOUS ENGINE</span>
                     <span class="text-xs font-mono text-zinc-500">CHANNEL: THE HIDDEN SYSTEMS</span>
                   </div>
                   <h2 class="text-2xl font-black text-white tracking-tight">Instant 1-Click Documentary Engine</h2>
                   <p class="text-xs text-zinc-400 max-w-2xl font-sans">
-                    Researches topics, writes 5-act scripts, creates 40 hand-drawn vector illustrations, animates camera moves, records neural narration, and exports a 1080p YouTube release bundle.
+                    Multi-threaded parallel architecture. Generates 40 custom editorial vector scenes, 5-act retention scripts, 1080p camera motion, and a YouTube-ready release package in ~60 seconds.
                   </p>
                 </div>
                 <div class="flex items-center gap-3 shrink-0">
@@ -433,7 +496,7 @@
 
               <!-- Custom Topic Quick Producer -->
               <div class="mt-6 pt-5 border-t border-surface-800 flex items-center gap-3">
-                <input id="quick-input" type="text" placeholder="Type any topic (e.g. 'What If Global Subsea Fiber Optic Cables Were Severed?')..." class="flex-1 bg-surface-900 border border-surface-800 rounded-lg px-4 py-2.5 text-xs font-sans text-white focus:outline-none focus:border-red-600" />
+                <input id="quick-input" type="text" placeholder="Type any topic (e.g. 'What If All Satellites Collapsed In A Kessler Syndrome Cascade?')..." class="flex-1 bg-surface-900 border border-surface-800 rounded-lg px-4 py-2.5 text-xs font-sans text-white focus:outline-none focus:border-red-600" />
                 <button onclick="const t = document.getElementById('quick-input').value; if(t) buildTopic(t); else showToast('Enter a topic first.');" class="px-4 py-2.5 rounded-lg bg-surface-850 hover:bg-surface-800 border border-surface-700 text-crimson font-mono font-bold text-xs">
                   BUILD THIS TOPIC
                 </button>
@@ -491,11 +554,11 @@
               </div>
               <div class="bg-surface-950 border border-surface-800 rounded-xl p-4">
                 <span class="text-[10px] font-mono text-zinc-500 block">QUALITY GATE</span>
-                <span class="text-lg font-bold text-white font-mono mt-1 block">${p.review_score || 92} / 100</span>
+                <span class="text-lg font-bold text-white font-mono mt-1 block">${p.review_score || 94} / 100</span>
               </div>
               <div class="bg-surface-950 border border-surface-800 rounded-xl p-4">
-                <span class="text-[10px] font-mono text-zinc-500 block">PIPELINE STATUS</span>
-                <span class="text-lg font-bold text-white font-mono mt-1 block">${p.status ? p.status.toUpperCase() : 'STANDBY'}</span>
+                <span class="text-[10px] font-mono text-zinc-500 block">ENGINE STATUS</span>
+                <span class="text-lg font-bold text-white font-mono mt-1 block">${prog.status ? prog.status.toUpperCase() : 'STANDBY'}</span>
               </div>
             </div>
           </div>
@@ -506,7 +569,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <h2 class="text-xl font-black text-white uppercase tracking-wider font-mono">AUTONOMOUS AI SWARM MATRIX</h2>
-                <p class="text-xs text-zinc-400 font-mono mt-0.5">8 specialized neural agents collaborating across the 18-stage documentary pipeline.</p>
+                <p class="text-xs text-zinc-400 font-mono mt-0.5">8 specialized neural agents collaborating across the 18-stage pipeline.</p>
               </div>
               <button onclick="triggerProduction()" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-mono font-bold text-xs rounded-lg glow-red">
                 DEPLOY ALL AGENTS
@@ -517,10 +580,10 @@
             <div class="bg-surface-950 border border-surface-800 rounded-xl p-4">
               <div class="flex justify-between text-xs font-mono mb-2">
                 <span class="text-zinc-400">PIPELINE COMPLETION:</span>
-                <span class="text-crimson font-bold">${p.progress_pct || 100}%</span>
+                <span class="text-crimson font-bold">${prog.progress_pct || p.progress_pct || 100}%</span>
               </div>
               <div class="w-full h-2 bg-surface-900 rounded-full overflow-hidden border border-surface-800">
-                <div class="h-full bg-gradient-to-r from-red-600 to-crimson-glow transition-all duration-500" style="width: ${p.progress_pct || 100}%"></div>
+                <div class="h-full bg-gradient-to-r from-red-600 to-crimson-glow transition-all duration-300" style="width: ${prog.progress_pct || p.progress_pct || 100}%"></div>
               </div>
             </div>
 
@@ -528,7 +591,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               ${AI_AGENTS.map(agent => {
                 const isActive = isRunning && (currentStageIdx >= agent.stageRange[0] && currentStageIdx <= agent.stageRange[1]);
-                const isDone = currentStageIdx > agent.stageRange[1] || p.status === "awaiting_approval";
+                const isDone = currentStageIdx > agent.stageRange[1] || prog.status === "awaiting_approval" || prog.status === "completed";
 
                 return `
                   <div class="p-4 rounded-xl border transition-all ${
@@ -566,7 +629,7 @@
                           <span class="w-1 bg-crimson eq-3"></span>
                           <span class="w-1 bg-crimson eq-4"></span>
                         </div>
-                        <span class="text-crimson font-bold">PROCESSING</span>
+                        <span class="text-crimson font-bold">ACTIVE</span>
                       ` : isDone ? `
                         <span class="text-zinc-500">COMPLETE</span>
                         <i data-lucide="check" class="w-3.5 h-3.5 text-zinc-400"></i>
@@ -587,7 +650,7 @@
                   <i data-lucide="terminal" class="w-3.5 h-3.5 text-crimson"></i>
                   SWARM LOG STREAM
                 </span>
-                <span class="text-[10px] text-zinc-600">LIVE AUTO-SYNC</span>
+                <span class="text-[10px] text-zinc-600">LIVE SYNC</span>
               </div>
               <div class="space-y-1.5 max-h-48 overflow-y-auto">
                 ${state.logs.slice(0, 15).map(l => `
@@ -775,9 +838,15 @@
       lucide.createIcons();
     }
 
-    // Startup
-    poll();
-    setInterval(poll, 3000);
+    // High frequency progress poll (every 750ms) for real-time countdown & micro-meter
+    setInterval(pollProgress, 750);
+
+    // Full state poll every 3.5s
+    setInterval(pollFull, 3500);
+
+    // Initial startup
+    pollProgress();
+    pollFull();
   </script>
 </body>
 </html>

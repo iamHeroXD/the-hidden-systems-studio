@@ -161,6 +161,7 @@ class ProductionProject(BaseModel):
     review_score: Optional[int] = None
     approved_by_user: bool = False
     cost_estimate_usd: float = 0.0
+    data: Dict[str, Any] = {}
 
 class SystemTelemetry(BaseModel):
     cpu_percent: float

@@ -127,8 +127,8 @@ def save_production_record(project: Dict[str, Any]):
         project.get("review_score"),
         1 if project.get("approved_by_user") else 0,
         project.get("cost_estimate_usd", 0.0),
-        json.dumps(project.get("stages", [])),
-        json.dumps(project.get("data", {}))
+        json.dumps(project.get("stages", []), default=str),
+        json.dumps(project.get("data", {}), default=str)
     ))
     conn.commit()
     conn.close()

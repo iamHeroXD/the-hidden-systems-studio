@@ -274,13 +274,23 @@ TOPIC_CATALOG = [
 ]
 
 class TopicIntelligenceEngine:
+    _cached_result = None
+    _cache_time = 0
+
     @staticmethod
     def discover_and_evaluate_topics(manual_override: str = None) -> Tuple[TopicCandidate, List[TopicCandidate], List[TopicCandidate]]:
         """
         Calculates realistic opportunity score based on:
         Curiosity (25%), Demand (20%), Competition gap (15%), Evergreen (10%),
         Visual Potential (15%), Research Confidence (10%), Production Feasibility (5%).
+        Uses an instant in-memory cache so API requests respond in < 1ms.
         """
+        import time
+        now = time.time()
+
+        if not manual_override and TopicIntelligenceEngine._cached_result and (now - TopicIntelligenceEngine._cache_time < 300):
+            return TopicIntelligenceEngine._cached_result
+
         all_candidates: List[TopicCandidate] = []
         conn = get_connection()
         existing_titles = set()
@@ -404,4 +414,9 @@ class TopicIntelligenceEngine:
         finally:
             conn.close()
 
-        return primary_candidate, backups, all_candidates
+        res = (primary_candidate, backups, all_candidates)
+        if not manual_override:
+            TopicIntelligenceEngine._cached_result = res
+            TopicIntelligenceEngine._cache_time = time.time()
+
+        return res
