@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
@@ -14,6 +15,7 @@ class EditorAgent:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         cmd = [
             "ffmpeg", "-y",
+            "-nostats", "-loglevel", "error",
             "-f", "lavfi",
             "-i", f"sine=frequency=55:duration={duration_sec}",
             "-f", "lavfi",
@@ -61,6 +63,7 @@ class EditorAgent:
         raw_video = output_dir / "raw_video_stitched.mp4"
         cmd_concat = [
             "ffmpeg", "-y",
+            "-nostats", "-loglevel", "error",
             "-f", "concat",
             "-safe", "0",
             "-i", str(concat_list),
@@ -86,6 +89,7 @@ class EditorAgent:
         # 5. Mux Video + Voice (Loudnorm -16 LUFS) + BGM (-22dB ducking)
         cmd_final = [
             "ffmpeg", "-y",
+            "-nostats", "-loglevel", "error",
             "-i", str(raw_video),
             "-i", str(narration_audio_path),
             "-i", str(bgm_path),
@@ -109,6 +113,7 @@ class EditorAgent:
             # If complex filter encountered issue with audio, fallback to direct audio copy
             cmd_fallback = [
                 "ffmpeg", "-y",
+                "-nostats", "-loglevel", "error",
                 "-i", str(raw_video),
                 "-i", str(narration_audio_path),
                 "-c:v", "copy",
@@ -119,18 +124,19 @@ class EditorAgent:
             ]
             subprocess.run(cmd_fallback, capture_output=True, timeout=120)
 
-        # 6. Generate lightweight 720p preview with +faststart for 0-buffer instant playback
-        cmd_prev = [
-            "ffmpeg", "-y",
-            "-i", str(final_mp4),
-            "-vf", "scale=1280:720",
-            "-c:v", "libx264",
-            "-preset", "ultrafast",
-            "-crf", "24",
-            "-movflags", "+faststart",
-            "-c:a", "copy",
-            str(preview_mp4)
-        ]
-        subprocess.run(cmd_prev, capture_output=True, timeout=180)
+        # 6. Set up instant streaming preview (fast copy of faststart master)
+        try:
+            shutil.copyfile(final_mp4, preview_mp4)
+        except Exception:
+            # Fallback to direct file link or ffmpeg copy
+            cmd_prev = [
+                "ffmpeg", "-y",
+                "-nostats", "-loglevel", "error",
+                "-i", str(final_mp4),
+                "-c", "copy",
+                "-movflags", "+faststart",
+                str(preview_mp4)
+            ]
+            subprocess.run(cmd_prev, capture_output=True, timeout=60)
 
         return final_mp4, preview_mp4

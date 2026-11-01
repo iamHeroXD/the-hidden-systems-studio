@@ -142,22 +142,21 @@ class CreateProductionRequest(BaseModel):
     topic_override: Optional[str] = None
 
 @app.post("/api/productions/create")
-def create_production(req: CreateProductionRequest, background_tasks: BackgroundTasks):
+def create_production(req: CreateProductionRequest):
     project = ProductionOrchestrator.create_project(topic_override=req.topic_override)
-    # Automatically start pipeline execution in background
-    background_tasks.add_task(ProductionOrchestrator.run_full_pipeline, project.id)
+    ProductionOrchestrator.start_pipeline_background(project.id)
     return {
         "id": project.id,
-        "message": "Production created and pipeline initiated in background.",
+        "message": "Production created and pipeline initiated in background thread.",
         "project": project.model_dump()
     }
 
 @app.post("/api/productions/{production_id}/run")
-def run_production(production_id: str, background_tasks: BackgroundTasks):
+def run_production(production_id: str):
     record = get_production_record(production_id)
     if not record:
         raise HTTPException(status_code=404, detail="Production not found")
-    background_tasks.add_task(ProductionOrchestrator.run_full_pipeline, production_id)
+    ProductionOrchestrator.start_pipeline_background(production_id)
     return {"message": f"Pipeline started for production {production_id}"}
 
 @app.post("/api/productions/{production_id}/pause")
@@ -171,14 +170,14 @@ def pause_production(production_id: str):
     return {"message": "Production paused."}
 
 @app.post("/api/productions/{production_id}/resume")
-def resume_production(production_id: str, background_tasks: BackgroundTasks):
+def resume_production(production_id: str):
     record = get_production_record(production_id)
     if not record:
         raise HTTPException(status_code=404, detail="Production not found")
     record["status"] = "running"
     save_production_record(record)
     log_event(production_id, "control", "INFO", "Production resumed by operator.")
-    background_tasks.add_task(ProductionOrchestrator.run_full_pipeline, production_id)
+    ProductionOrchestrator.start_pipeline_background(production_id)
     return {"message": "Production resumed."}
 
 @app.post("/api/productions/{production_id}/approve")
@@ -228,9 +227,9 @@ class ProduceTopicRequest(BaseModel):
     title: str
 
 @app.post("/api/topics/produce")
-def produce_topic_now(req: ProduceTopicRequest, background_tasks: BackgroundTasks):
+def produce_topic_now(req: ProduceTopicRequest):
     project = ProductionOrchestrator.create_project(topic_override=req.title)
-    background_tasks.add_task(ProductionOrchestrator.run_full_pipeline, project.id)
+    ProductionOrchestrator.start_pipeline_background(project.id)
     return {
         "message": f"Production initiated for topic: '{req.title}'",
         "project_id": project.id
@@ -245,9 +244,9 @@ def get_logs(production_id: Optional[str] = None, limit: int = 100):
 # --- Automation Endpoints ---
 
 @app.post("/api/automation/trigger-now")
-def trigger_automation_now(background_tasks: BackgroundTasks):
+def trigger_automation_now():
     project = ProductionOrchestrator.create_project()
-    background_tasks.add_task(ProductionOrchestrator.run_full_pipeline, project.id)
+    ProductionOrchestrator.start_pipeline_background(project.id)
     return {
         "message": f"Automation triggered manually. Production {project.id} started.",
         "production_id": project.id

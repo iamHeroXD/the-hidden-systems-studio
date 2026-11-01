@@ -315,6 +315,14 @@
       const elapsed = document.getElementById("elapsed-val");
       if (elapsed) elapsed.textContent = formatTime(prog.elapsed_sec || 0);
 
+      const stageNum = document.getElementById("current-stage-num");
+      if (stageNum) stageNum.textContent = (prog.stage_index + 1);
+
+      const stageName = document.getElementById("current-stage-name");
+      if (stageName) {
+        stageName.textContent = prog.live?.stage_name || (prog.stages && prog.stages[prog.stage_index] ? prog.stages[prog.stage_index].name : 'Executing');
+      }
+
       const pct = document.getElementById("progress-pct-val");
       if (pct) pct.textContent = `${prog.progress_pct || 0}%`;
 
@@ -329,6 +337,12 @@
       const liveCount = document.getElementById("micro-meter-count");
       if (liveCount && prog.live && prog.live.total) {
         liveCount.textContent = `${prog.live.done || 0} / ${prog.live.total || 40} (${prog.live.pct || 0}%)`;
+      }
+
+      const liveBox = document.getElementById("micro-meter-box");
+      if (liveBox) {
+        if (prog.live && prog.live.total) liveBox.classList.remove("hidden");
+        else liveBox.classList.add("hidden");
       }
     }
 
@@ -582,26 +596,24 @@
                 <div class="space-y-1.5 mb-4">
                   <div class="flex justify-between text-xs font-mono">
                     <span class="text-zinc-300 font-bold">
-                      STAGE ${prog.stage_index + 1} OF ${prog.total_stages || 18}: 
-                      <span class="text-white">${prog.live?.stage_name || (prog.stages && prog.stages[prog.stage_index] ? prog.stages[prog.stage_index].name : 'Executing')}</span>
+                      STAGE <span id="current-stage-num">${prog.stage_index + 1}</span> OF ${prog.total_stages || 18}: 
+                      <span class="text-white" id="current-stage-name">${prog.live?.stage_name || (prog.stages && prog.stages[prog.stage_index] ? prog.stages[prog.stage_index].name : 'Executing')}</span>
                     </span>
-                    <span class="text-crimson font-black text-sm">${prog.progress_pct || 0}%</span>
+                    <span class="text-crimson font-black text-sm" id="progress-pct-val">${prog.progress_pct || 0}%</span>
                   </div>
                   <div class="w-full h-3 bg-surface-900 rounded-full overflow-hidden border border-surface-800 p-0.5">
-                    <div class="h-full bg-gradient-to-r from-red-600 to-crimson-glow rounded-full transition-all duration-300" style="width: ${prog.progress_pct || 0}%"></div>
+                    <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-red-600 to-crimson-glow rounded-full transition-all duration-300" style="width: ${prog.progress_pct || 0}%"></div>
                   </div>
                 </div>
 
                 <!-- Live Micro-Meter -->
-                ${prog.live && prog.live.total ? `
-                  <div class="bg-surface-900 border border-surface-800 rounded-xl p-3 flex items-center justify-between font-mono text-xs">
-                    <div class="flex items-center gap-2">
-                      <i data-lucide="activity" class="w-4 h-4 text-crimson"></i>
-                      <span class="text-zinc-300 font-bold">${prog.live.msg || 'Processing'}</span>
-                    </div>
-                    <span class="text-crimson font-black">${prog.live.done || 0} / ${prog.live.total || 40} (${prog.live.pct || 0}%)</span>
+                <div id="micro-meter-box" class="bg-surface-900 border border-surface-800 rounded-xl p-3 flex items-center justify-between font-mono text-xs ${prog.live && prog.live.total ? '' : 'hidden'}">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="activity" class="w-4 h-4 text-crimson"></i>
+                    <span class="text-zinc-300 font-bold" id="micro-meter-msg">${prog.live?.msg || 'Processing'}</span>
                   </div>
-                ` : ''}
+                  <span class="text-crimson font-black" id="micro-meter-count">${prog.live?.done || 0} / ${prog.live?.total || 40} (${prog.live?.pct || 0}%)</span>
+                </div>
               </div>
             ` : ''}
 

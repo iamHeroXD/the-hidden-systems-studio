@@ -373,3 +373,30 @@ class ProductionOrchestrator:
             if project_dict["status"] != "awaiting_approval":
                 project_dict["status"] = "completed"
             save_production_record(project_dict)
+
+    @staticmethod
+    def start_pipeline_background(production_id: str):
+        """
+        Launches the complete autonomous documentary production pipeline in a dedicated,
+        isolated background thread with its own event loop.
+        This guarantees FastAPI's main asyncio loop remains 100% responsive for live polling.
+        """
+        import threading
+        
+        def _worker():
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                loop.run_until_complete(ProductionOrchestrator.run_full_pipeline(production_id))
+            except Exception as e:
+                print(f"Background pipeline execution error for {production_id}: {e}")
+            finally:
+                try:
+                    loop.close()
+                except Exception:
+                    pass
+
+        t = threading.Thread(target=_worker, daemon=True, name=f"PipelineWorker-{production_id}")
+        t.start()
+        return t
