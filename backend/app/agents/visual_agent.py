@@ -353,95 +353,152 @@ class IllustrationAgent:
     @staticmethod
     def generate_scene_png(scene: StoryboardScene, output_png: Path) -> str:
         """
-        Renders a high-definition 1920x1080 raster frame matching the signature
-        'The Hidden Systems' visual design with antialiased shapes, volumetric glow,
-        and crisp technical overlays.
+        Renders a broadcast-grade 1920x1080 raster frame matching the signature
+        'The Hidden Systems' visual design with antialiased geometry, volumetric glowing filaments,
+        precise typography, technical telemetry HUD, and scene narration overlays.
         """
         w, h = 1920, 1080
         p = PALETTE
         archetype = IllustrationAgent.get_archetype_for_scene(scene)
 
+        # Load crisp Windows system fonts with safe fallbacks
+        try:
+            font_title = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", 32)
+            font_hud = ImageFont.truetype("C:/Windows/Fonts/consola.ttf", 18)
+            font_hud_sm = ImageFont.truetype("C:/Windows/Fonts/consola.ttf", 14)
+            font_narr = ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 22)
+            font_narr_bold = ImageFont.truetype("C:/Windows/Fonts/segoeuib.ttf", 15)
+        except Exception:
+            font_title = font_hud = font_hud_sm = font_narr = font_narr_bold = ImageFont.load_default()
+
         img = Image.new("RGB", (w, h), color=p["bg_dark"])
         draw = ImageDraw.Draw(img)
 
-        # Draw technical grid
-        grid_color = (20, 26, 38)
-        for x in range(0, w, 160):
+        # 1. Technical Blueprint Grid & Guidelines
+        grid_color = (18, 24, 34)
+        for x in range(0, w, 120):
             draw.line([(x, 0), (x, h)], fill=grid_color, width=1)
-        for y in range(0, h, 120):
+        for y in range(0, h, 90):
             draw.line([(0, y), (w, y)], fill=grid_color, width=1)
 
-        # Center guidelines & coordinate axes
-        draw.line([(960, 0), (960, h)], fill=(40, 50, 70), width=1)
-        draw.line([(0, 540), (w, 540)], fill=(40, 50, 70), width=1)
-        draw.ellipse([960 - 320, 540 - 320, 960 + 320, 540 + 320], outline=(30, 40, 58), width=2)
+        # Primary Coordinate Crosshairs & Radial Reticles
+        draw.line([(960, 0), (960, h)], fill=(32, 42, 60), width=1)
+        draw.line([(0, 540), (w, 540)], fill=(32, 42, 60), width=1)
+        draw.ellipse([960 - 360, 540 - 360, 960 + 360, 540 + 360], outline=(28, 38, 54), width=2)
+        draw.ellipse([960 - 180, 540 - 180, 960 + 180, 540 + 180], outline=(40, 55, 80), width=1)
 
-        # Archetype Specific Drawing
+        # 2. Top Telemetry Header HUD
+        draw.rounded_rectangle([50, 40, w - 50, 110], radius=8, fill=(8, 11, 16), outline=(32, 42, 60), width=1)
+        draw.ellipse([75, 67, 91, 83], fill=p["crimson_glow"])
+        draw.text((105, 55), "THE HIDDEN SYSTEMS // AUTONOMOUS DOCUMENTARY LEDGER", fill=p["crimson_accent"], font=font_hud)
+        draw.text((105, 80), f"ACT 0{scene.act_number} // SCENE {scene.scene_id:02d} OF 40 // ARCHETYPE: {archetype.upper().replace('_', ' ')}", fill="#E2E8F0", font=font_hud_sm)
+        
+        telemetry_txt = f"SYS.TIME 00:{scene.scene_id * 18:02d} // FREQ: 1420 MHZ // ENCRYPT: 4096-RSA"
+        draw.text((w - 560, 68), telemetry_txt, fill=p["amber_filament"], font=font_hud_sm)
+
+        # 3. Archetype-Specific Rich Vector Illustration
         if archetype == "fiber_network":
-            draw.line([(100, 840), (600, 780), (960, 810), (1820, 740)], fill=p["teal_laser"], width=12)
-            draw.line([(100, 840), (600, 780), (960, 810), (1820, 740)], fill="#FFFFFF", width=4)
-            draw.ellipse([960 - 180, 480 - 180, 960 + 180, 480 + 180], fill=p["bg_surface"], outline=p["line_chalk"], width=5)
-            draw.ellipse([960 - 80, 480 - 80, 960 + 80, 480 + 80], fill=p["teal_laser"], outline="#FFFFFF", width=3)
-            draw.ellipse([960 - 25, 480 - 25, 960 + 25, 480 + 25], fill="#FFFFFF")
-            draw.ellipse([700, 465, 730, 495], fill=p["teal_laser"])
-            draw.ellipse([1190, 465, 1220, 495], fill=p["crimson_glow"])
+            # Subsea Bathymetry Contour & High-Power Optical Core
+            draw.line([(100, 840), (550, 780), (960, 810), (1820, 740)], fill=p["teal_laser"], width=12)
+            draw.line([(100, 840), (550, 780), (960, 810), (1820, 740)], fill="#FFFFFF", width=4)
+            # Center Multi-Core Splice Chamber
+            draw.ellipse([960 - 200, 480 - 200, 960 + 200, 480 + 200], fill=p["bg_surface"], outline=p["line_chalk"], width=4)
+            draw.ellipse([960 - 100, 480 - 100, 960 + 100, 480 + 100], fill=p["teal_laser"], outline="#FFFFFF", width=3)
+            draw.ellipse([960 - 30, 480 - 30, 960 + 30, 480 + 30], fill="#FFFFFF")
+            # Satellite Pulse Nodes
+            draw.ellipse([680, 465, 720, 505], fill=p["teal_laser"], outline="#FFFFFF", width=2)
+            draw.ellipse([1200, 465, 1240, 505], fill=p["crimson_glow"], outline="#FFFFFF", width=2)
+            draw.line([(720, 485), (1200, 485)], fill=p["line_dim"], width=2)
+            draw.text((960, 720), "TRANSOCEANIC OPTICAL BACKBONE: 99.4% GLOBAL TRAFFIC", fill=p["teal_laser"], font=font_hud, anchor="mm")
 
         elif archetype == "radio_telecom":
-            draw.polygon([(880, 840), (960, 260), (1040, 840)], outline=p["line_chalk"], width=6)
-            draw.line([(910, 460), (1010, 460)], fill=p["line_chalk"], width=4)
-            draw.line([(895, 640), (1025, 640)], fill=p["line_chalk"], width=4)
-            draw.ellipse([960 - 20, 240 - 20, 960 + 20, 240 + 20], fill=p["crimson_glow"])
-            draw.arc([960 - 90, 240 - 90, 960 + 90, 240 + 90], start=0, end=360, fill=p["crimson_accent"], width=5)
-            draw.arc([960 - 180, 240 - 180, 960 + 180, 240 + 180], start=0, end=360, fill=p["crimson_accent"], width=3)
-            draw.arc([960 - 300, 240 - 300, 960 + 300, 240 + 300], start=0, end=360, fill=p["crimson_dark"], width=2)
-            draw.rounded_rectangle([360, 520, 540, 840], radius=16, fill=p["bg_surface"], outline=p["line_chalk"], width=4)
+            # Cellular Transmission Pylon & Pulse Wavefronts
+            draw.polygon([(880, 840), (960, 240), (1040, 840)], outline=p["line_chalk"], width=5)
+            draw.line([(910, 440), (1010, 440)], fill=p["line_chalk"], width=4)
+            draw.line([(895, 620), (1025, 620)], fill=p["line_chalk"], width=4)
+            draw.ellipse([960 - 24, 240 - 24, 960 + 24, 240 + 24], fill=p["crimson_glow"])
+            # Concentric Radar Pulse Arcs
+            draw.arc([960 - 120, 240 - 120, 960 + 120, 240 + 120], start=0, end=360, fill=p["crimson_accent"], width=5)
+            draw.arc([960 - 240, 240 - 240, 960 + 240, 240 + 240], start=0, end=360, fill=p["crimson_accent"], width=3)
+            draw.arc([960 - 380, 240 - 380, 960 + 380, 240 + 380], start=0, end=360, fill=(120, 20, 20), width=2)
+            # Handheld Receiver Silhouette
+            draw.rounded_rectangle([360, 480, 540, 820], radius=20, fill=p["bg_surface"], outline=p["line_chalk"], width=4)
+            draw.rounded_rectangle([380, 510, 520, 750], radius=8, fill="#050811")
+            draw.text((450, 630), "NO CARRIER", fill=p["crimson_glow"], font=font_hud_sm, anchor="mm")
+            draw.text((960, 720), "3GPP CELLULAR SIGNALING STORM: RADIO CHANNELS SATURATED", fill=p["crimson_accent"], font=font_hud, anchor="mm")
 
         elif archetype == "digital_finance":
-            draw.polygon([(760, 340), (1160, 340), (1240, 780), (680, 780)], fill=p["bg_surface"], outline=p["line_chalk"])
-            draw.rounded_rectangle([740, 380, 1100, 580], radius=10, fill="#090D16", outline=p["crimson_accent"], width=4)
-            for bx in [800, 880, 960, 1040]:
-                for by in [650, 720]:
+            # Transaction Terminal & Disconnected Ledger
+            draw.polygon([(740, 320), (1180, 320), (1260, 760), (660, 760)], fill=p["bg_surface"], outline=p["line_chalk"], width=4)
+            draw.rounded_rectangle([720, 360, 1120, 560], radius=12, fill="#060910", outline=p["crimson_accent"], width=4)
+            draw.text((920, 440), "GATEWAY TIMEOUT: 504", fill=p["crimson_glow"], font=font_title, anchor="mm")
+            draw.text((920, 490), "LEDGER DESYNCHRONIZED // ZERO CLEARED TRANSACTIONS", fill=p["amber_filament"], font=font_hud_sm, anchor="mm")
+            # Keypad Dials
+            for bx in [780, 860, 940, 1020]:
+                for by in [620, 690]:
                     draw.ellipse([bx - 16, by - 16, bx + 16, by + 16], fill="#1E293B", outline=p["line_chalk"], width=2)
+            draw.text((960, 720), "SWIFT & FEDWIRE HIGH-VALUE SETTLEMENT SUSPENDED", fill=p["amber_filament"], font=font_hud, anchor="mm")
 
         elif archetype == "logistics_freight":
-            draw.line([(300, 780), (1620, 780)], fill=p["line_chalk"], width=6)
-            draw.line([(500, 780), (500, 280)], fill=p["line_chalk"], width=6)
-            draw.line([(1420, 780), (1420, 280)], fill=p["line_chalk"], width=6)
-            draw.line([(460, 280), (1460, 280)], fill=p["line_chalk"], width=8)
-            draw.rounded_rectangle([840, 420, 1080, 570], radius=8, fill=p["bg_surface"], outline=p["amber_filament"], width=5)
-            draw.line([(880, 280), (880, 420)], fill=p["line_dim"], width=3)
-            draw.line([(1040, 280), (1040, 420)], fill=p["line_dim"], width=3)
+            # Gantry Crane & Intermodal Container Hub
+            draw.line([(280, 780), (1640, 780)], fill=p["line_chalk"], width=6)
+            draw.line([(480, 780), (480, 260)], fill=p["line_chalk"], width=6)
+            draw.line([(1440, 780), (1440, 260)], fill=p["line_chalk"], width=6)
+            draw.line([(440, 260), (1480, 260)], fill=p["line_chalk"], width=8)
+            draw.rounded_rectangle([820, 400, 1100, 560], radius=10, fill=p["bg_surface"], outline=p["amber_filament"], width=5)
+            draw.line([(860, 260), (860, 400)], fill=p["line_dim"], width=3)
+            draw.line([(1060, 260), (1060, 400)], fill=p["line_dim"], width=3)
+            draw.text((960, 480), "CONTAINER #HS-9942 LOCKED", fill="#FFFFFF", font=font_hud, anchor="mm")
+            draw.text((960, 720), "JUST-IN-TIME FREIGHT CORRIDORS HALTED AT INLAND HUBS", fill=p["amber_filament"], font=font_hud, anchor="mm")
 
         elif archetype == "power_grid":
-            draw.polygon([(860, 220), (1060, 220), (1140, 840), (780, 840)], fill=p["bg_surface"], outline=p["line_chalk"])
-            draw.ellipse([960 - 32, 220 - 32, 960 + 32, 220 + 32], fill=p["amber_filament"])
-            draw.line([(600, 500), (700, 480), (680, 540), (780, 510)], fill=p["crimson_glow"], width=5)
-            draw.ellipse([780 - 16, 510 - 16, 780 + 16, 510 + 16], fill=p["crimson_accent"])
+            # High-Voltage Substation Transformer & Disconnected Breaker
+            draw.polygon([(840, 200), (1080, 200), (1160, 820), (760, 820)], fill=p["bg_surface"], outline=p["line_chalk"], width=4)
+            draw.ellipse([960 - 36, 200 - 36, 960 + 36, 200 + 36], fill=p["amber_filament"])
+            # Electric Arc Discharge
+            draw.line([(580, 480), (690, 450), (670, 520), (780, 490)], fill=p["crimson_glow"], width=6)
+            draw.ellipse([780 - 18, 490 - 18, 780 + 18, 490 + 18], fill=p["crimson_accent"])
+            draw.text((960, 600), "SCADA BREAKER 14-B TRIPPED", fill=p["crimson_glow"], font=font_title, anchor="mm")
+            draw.text((960, 720), "PHASE SYNCHRONIZATION DRIFT: REGIONAL GRID ISLANDING", fill=p["amber_filament"], font=font_hud, anchor="mm")
 
         elif archetype == "datacenter_core":
-            for rx in [420, 820, 1220]:
-                draw.rounded_rectangle([rx, 280, rx + 280, 840], radius=8, fill=p["bg_surface"], outline=p["line_chalk"], width=4)
-                for led_y in range(320, 800, 60):
-                    draw.ellipse([rx + 40, led_y, rx + 56, led_y + 16], fill=p["crimson_accent"])
-                    draw.ellipse([rx + 80, led_y, rx + 96, led_y + 16], fill=p["amber_filament"])
-                    draw.ellipse([rx + 120, led_y, rx + 136, led_y + 16], fill=p["teal_laser"])
+            # Server Blade Racks & Fiber Patch Bay
+            for rx in [380, 820, 1260]:
+                draw.rounded_rectangle([rx, 260, rx + 280, 820], radius=8, fill=p["bg_surface"], outline=p["line_chalk"], width=4)
+                for led_y in range(300, 780, 50):
+                    draw.ellipse([rx + 35, led_y, rx + 49, led_y + 14], fill=p["crimson_accent"])
+                    draw.ellipse([rx + 75, led_y, rx + 89, led_y + 14], fill=p["amber_filament"])
+                    draw.ellipse([rx + 115, led_y, rx + 129, led_y + 14], fill=p["teal_laser"])
+            draw.text((960, 720), "BORDER GATEWAY PROTOCOL: 0 ROUTES IN GLOBAL RIB", fill=p["teal_laser"], font=font_hud, anchor="mm")
 
         elif archetype == "human_society":
-            for b_x, b_w, b_h in [(200, 140, 320), (360, 180, 420), (560, 140, 240), (1200, 180, 360), (1400, 200, 480)]:
-                draw.rectangle([b_x, 840 - b_h, b_x + b_w, 840], fill=p["bg_surface"], outline=p["line_dim"], width=2)
-            draw.rounded_rectangle([840, 540, 1080, 720], radius=16, fill=p["bg_surface"], outline=p["amber_filament"], width=5)
-            draw.ellipse([910 - 45, 630 - 45, 910 + 45, 630 + 45], fill="#1E293B", outline=p["line_chalk"], width=3)
-            draw.line([(840, 540), (800, 400)], fill=p["line_chalk"], width=4)
+            # Metropolitan City Silhouette & Emergency AM Receiver
+            for b_x, b_w, b_h in [(180, 150, 340), (350, 190, 440), (560, 150, 260), (1210, 190, 380), (1420, 210, 500)]:
+                draw.rectangle([b_x, 820 - b_h, b_x + b_w, 820], fill=p["bg_surface"], outline=p["line_dim"], width=2)
+            draw.rounded_rectangle([820, 520, 1100, 720], radius=18, fill=p["bg_surface"], outline=p["amber_filament"], width=5)
+            draw.ellipse([910 - 50, 620 - 50, 910 + 50, 620 + 50], fill="#1E293B", outline=p["line_chalk"], width=3)
+            draw.line([(820, 520), (780, 380)], fill=p["line_chalk"], width=4)
+            draw.text((960, 740), "ANALOG EMERGENCY BROADCAST: 640 KHZ CONELRAD", fill=p["amber_filament"], font=font_hud, anchor="mm")
 
         else:
-            draw.ellipse([960 - 160, 460 - 160, 960 + 160, 460 + 160], fill=p["bg_surface"], outline=p["amber_filament"], width=5)
-            draw.ellipse([960 - 60, 460 - 60, 960 + 60, 460 + 60], fill=p["teal_laser"], outline="#FFFFFF", width=3)
-            draw.line([(400, 460), (1520, 460)], fill=p["line_dim"], width=1)
+            # Investigator Insight Archetype
+            draw.ellipse([960 - 180, 460 - 180, 960 + 180, 460 + 180], fill=p["bg_surface"], outline=p["amber_filament"], width=5)
+            draw.ellipse([960 - 80, 460 - 80, 960 + 80, 460 + 80], fill=p["teal_laser"], outline="#FFFFFF", width=3)
+            draw.line([(350, 460), (1570, 460)], fill=p["line_dim"], width=1)
+            draw.text((960, 720), "SYSTEM ARCHITECTURE: HIDDEN DEPENDENCY MAP", fill="#FFFFFF", font=font_title, anchor="mm")
 
-        # Outer vignette border & Lower-Third HUD
-        draw.rectangle([40, 40, w - 40, h - 40], outline=(30, 40, 60), width=2)
-        draw.rounded_rectangle([60, 940, 700, 1010], radius=10, fill=(9, 13, 20), outline=p["line_dim"], width=2)
-        draw.ellipse([80, 965, 96, 981], fill=p["crimson_glow"])
+        # 4. Cinematic Documentary Lower-Third HUD
+        narr_text = scene.narration_chunk.strip()
+        if len(narr_text) > 130:
+            narr_text = narr_text[:127] + "..."
+
+        draw.rounded_rectangle([60, 890, w - 60, 1020], radius=12, fill=(10, 14, 20), outline=p["crimson_accent"], width=2)
+        draw.ellipse([85, 918, 99, 932], fill=p["crimson_glow"])
+        draw.text((115, 910), f"SCENE {scene.scene_id:02d} // CAMERA: {scene.camera_movement.upper()} // SOUND: {scene.sound_design[:35].upper()}", fill=p["amber_filament"], font=font_narr_bold)
+        draw.text((115, 945), f'"{narr_text}"', fill="#FFFFFF", font=font_narr)
+
+        # Outer Frame Vignette Border
+        draw.rectangle([20, 20, w - 20, h - 20], outline=(30, 40, 58), width=1)
 
         output_png.parent.mkdir(parents=True, exist_ok=True)
         img.save(output_png, format="PNG")

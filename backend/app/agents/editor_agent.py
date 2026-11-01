@@ -9,21 +9,22 @@ class EditorAgent:
     def generate_ambient_soundtrack(duration_sec: float, output_path: Path) -> Path:
         """
         Synthesizes a copyright-safe, atmospheric, mysterious documentary score
-        using procedural FFmpeg audio filters (warm minor drones, subtle flanger).
+        using procedural FFmpeg audio filters (warm 55Hz sub-bass, 110Hz drone, 165Hz fifth, subtle flanger).
         """
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        # Complex audio filter: layered 110Hz (A2), 165Hz (E3), and 220Hz (A3) sine waves with lowpass filter
         cmd = [
             "ffmpeg", "-y",
+            "-f", "lavfi",
+            "-i", f"sine=frequency=55:duration={duration_sec}",
             "-f", "lavfi",
             "-i", f"sine=frequency=110:duration={duration_sec}",
             "-f", "lavfi",
             "-i", f"sine=frequency=165:duration={duration_sec}",
             "-f", "lavfi",
-            "-i", f"anoisesrc=d={duration_sec}:c=pink:r=44100:a=0.01",
+            "-i", f"anoisesrc=d={duration_sec}:c=pink:r=44100:a=0.008",
             "-filter_complex",
-            f"[0:a]volume=0.25[a0];[1:a]volume=0.15[a1];[2:a]lowpass=f=400,volume=0.08[a2];"
-            f"[a0][a1][a2]amix=inputs=3:duration=first[mixed];"
+            f"[0:a]volume=0.35[a0];[1:a]volume=0.20[a1];[2:a]volume=0.10[a2];[3:a]lowpass=f=350,volume=0.06[a3];"
+            f"[a0][a1][a2][a3]amix=inputs=4:duration=first[mixed];"
             f"[mixed]flanger=delay=15:depth=4:regen=20:width=80:speed=0.2[flanged];"
             f"[flanged]afade=t=in:ss=0:d=2,afade=t=out:st={max(2.0, duration_sec - 2.0)}:d=2[out]",
             "-map", "[out]",

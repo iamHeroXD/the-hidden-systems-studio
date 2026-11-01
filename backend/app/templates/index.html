@@ -38,7 +38,7 @@
     }
   </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
     body {
       background-color: #000000;
       color: #FFFFFF;
@@ -72,8 +72,8 @@
     ::-webkit-scrollbar-thumb:hover { background: #EF4444; }
 
     @keyframes eqBar {
-      0%, 100% { height: 3px; }
-      50% { height: 16px; }
+      0%, 100% { height: 4px; }
+      50% { height: 18px; }
     }
     .eq-1 { animation: eqBar 0.7s ease-in-out infinite; }
     .eq-2 { animation: eqBar 0.4s ease-in-out infinite 0.15s; }
@@ -158,7 +158,7 @@
           <span id="stat-ram" class="text-white font-bold">-- / -- GB</span>
         </div>
         <div class="flex justify-between text-zinc-400">
-          <span>OUTPUT:</span>
+          <span>ENGINE:</span>
           <span class="text-crimson font-bold">1080P 30FPS</span>
         </div>
       </div>
@@ -170,10 +170,10 @@
     </main>
   </div>
 
-  <!-- Scene Inspection Lightbox Modal -->
-  <div id="modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-surface-900 border border-surface-700 rounded-2xl max-w-4xl w-full p-6 relative shadow-2xl space-y-4">
-      <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg bg-surface-800 border border-surface-700">
+  <!-- Scene Inspection Lightbox Modal (Supports MP4 Video, PNG, SVG) -->
+  <div id="modal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-surface-950 border border-surface-700 rounded-2xl max-w-4xl w-full p-6 relative shadow-2xl space-y-4">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg bg-surface-800 border border-surface-700 z-10">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
       <div id="modal-content"></div>
@@ -189,6 +189,7 @@
   <!-- ================= JAVASCRIPT ================= -->
   <script>
     let currentTab = "overview";
+    let modalMode = "video"; // "video", "frame", "vector"
     let state = {
       prod: null,
       progress: null,
@@ -204,10 +205,10 @@
       { id: "research", name: "RESEARCH AI", role: "Fact-Checked Dossier", icon: "search", stageRange: [1, 3] },
       { id: "writer", name: "SCRIPTWRITER AI", role: "5-Act Retention Narrative", icon: "pen-tool", stageRange: [3, 5] },
       { id: "illustrator", name: "ILLUSTRATION AI", role: "40 Vector 1080p Scenes", icon: "palette", stageRange: [5, 8] },
-      { id: "voice", name: "NEURAL VOICE AI", role: "Edge-TTS Narration Master", icon: "mic", stageRange: [8, 10] },
-      { id: "animator", name: "ANIMATION AI", role: "1080p Camera Movement", icon: "video", stageRange: [10, 12] },
-      { id: "sound", name: "MASTER AUDIO AI", role: "EBU R128 -16 LUFS Mixer", icon: "sliders", stageRange: [12, 14] },
-      { id: "publisher", name: "YOUTUBE PUBLISHER AI", role: "Thumbnails & Release Package", icon: "package", stageRange: [15, 17] }
+      { id: "animator", name: "ANIMATION AI", role: "1080p Camera Movement", icon: "video", stageRange: [8, 9] },
+      { id: "voice", name: "NEURAL VOICE AI", role: "Edge-TTS Narration Master", icon: "mic", stageRange: [9, 10] },
+      { id: "sound", name: "AUDIO & VIDEO MIXER", role: "EBU R128 -16 LUFS Normalizer", icon: "sliders", stageRange: [11, 14] },
+      { id: "publisher", name: "YOUTUBE PUBLISHER AI", role: "Thumbnails & Release Package", icon: "package", stageRange: [14, 17] }
     ];
 
     function showToast(text) {
@@ -243,7 +244,6 @@
           const prog = await res.json();
           state.progress = prog;
           updateStatus();
-          // If in flight, re-render to keep countdown and micro-bars fluid
           if (prog.status === "running") {
             renderView();
           }
@@ -343,8 +343,36 @@
       showToast(`Copied ${label} to clipboard!`);
     }
 
+    function copyFullYouTubePackage() {
+      const p = state.prod || {};
+      const meta = (p.data && p.data.metadata) || {};
+      const chaptersText = (meta.chapters || []).map(c => `${c.time} - ${c.title}`).join("\n");
+      const pkg = `TITLE:\n${meta.final_title || p.topic_title}\n\nDESCRIPTION:\n${meta.description || ''}\n\nTAGS:\n${(meta.tags || []).join(', ')}\n\nPINNED COMMENT:\n${meta.pinned_comment || ''}`;
+      navigator.clipboard.writeText(pkg);
+      showToast("Entire YouTube Package (Title, Description, Chapters, Tags) Copied!");
+    }
+
+    async function openProjectFolder() {
+      const p = state.prod || {};
+      if (!p.id) return;
+      try {
+        const res = await fetch(`/api/productions/${p.id}/open-folder`, { method: "POST" });
+        const data = await res.json();
+        showToast(data.message || "Opened project folder in Explorer.");
+      } catch (e) {
+        showToast("Error opening folder: " + e.message);
+      }
+    }
+
+    function setModalMode(mode) {
+      modalMode = mode;
+      renderModal();
+      lucide.createIcons();
+    }
+
     function openModal(idx) {
       state.sceneIdx = idx;
+      modalMode = "video";
       renderModal();
       document.getElementById("modal").classList.remove("hidden");
       lucide.createIcons();
@@ -368,32 +396,55 @@
       const s = scenes[state.sceneIdx] || {};
       const scNum = (state.sceneIdx + 1).toString().padStart(2, "0");
       const content = document.getElementById("modal-content");
+
+      const videoSrc = `/media/${p.date_folder}/${p.topic_slug}/animation/rendered_scenes/scene_${scNum}.mp4`;
+      const pngSrc = `/media/${p.date_folder}/${p.topic_slug}/illustrations/scene_${scNum}.png`;
+      const svgSrc = `/media/${p.date_folder}/${p.topic_slug}/illustrations/scene_${scNum}.svg`;
+
       content.innerHTML = `
         <div class="space-y-4">
           <div class="flex items-center justify-between pr-8">
             <div class="flex items-center gap-3">
-              <span class="px-2.5 py-1 rounded bg-red-600 text-white font-mono font-bold text-xs">
+              <span class="px-2.5 py-1 rounded bg-red-600 text-white font-mono font-bold text-xs glow-red">
                 SCENE ${scNum} / ${scenes.length || 40}
               </span>
               <span class="text-xs font-mono text-zinc-400">CAMERA MOVE: <span class="text-white font-bold">${s.camera_movement || 'Dynamic Pan'}</span></span>
             </div>
             <div class="flex items-center gap-2">
-              <button onclick="stepScene(-1)" class="px-3 py-1 bg-surface-800 hover:bg-surface-700 text-xs font-mono rounded text-white">PREV</button>
-              <button onclick="stepScene(1)" class="px-3 py-1 bg-surface-800 hover:bg-surface-700 text-xs font-mono rounded text-white">NEXT</button>
+              <button onclick="stepScene(-1)" class="px-3 py-1 bg-surface-850 hover:bg-surface-800 text-xs font-mono rounded text-white border border-surface-700">PREV</button>
+              <button onclick="stepScene(1)" class="px-3 py-1 bg-surface-850 hover:bg-surface-800 text-xs font-mono rounded text-white border border-surface-700">NEXT</button>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-black rounded-xl overflow-hidden border border-surface-800">
-              <img src="/media/${p.date_folder}/${p.topic_slug}/illustrations/scene_${scNum}.png" class="w-full aspect-video object-cover" />
-              <div class="p-1.5 text-center text-[10px] font-mono text-zinc-400 bg-surface-950 border-t border-surface-800">1080P RASTER FRAME</div>
-            </div>
-            <div class="bg-black rounded-xl overflow-hidden border border-surface-800">
-              <img src="/media/${p.date_folder}/${p.topic_slug}/illustrations/scene_${scNum}.svg" class="w-full aspect-video object-contain p-2" />
-              <div class="p-1.5 text-center text-[10px] font-mono text-zinc-400 bg-surface-950 border-t border-surface-800">EDITORIAL VECTOR SVG</div>
-            </div>
+
+          <!-- Format Switcher Tabs -->
+          <div class="flex items-center gap-2 border-b border-surface-800 pb-2">
+            <button onclick="setModalMode('video')" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition ${modalMode === 'video' ? 'bg-red-600 text-white glow-red' : 'bg-surface-900 text-zinc-400 hover:text-white'}">
+              ▶ WATCH SCENE VIDEO (.MP4)
+            </button>
+            <button onclick="setModalMode('frame')" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition ${modalMode === 'frame' ? 'bg-red-600 text-white glow-red' : 'bg-surface-900 text-zinc-400 hover:text-white'}">
+              1080P MASTER FRAME (.PNG)
+            </button>
+            <button onclick="setModalMode('vector')" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition ${modalMode === 'vector' ? 'bg-red-600 text-white glow-red' : 'bg-surface-900 text-zinc-400 hover:text-white'}">
+              VECTOR SCHEMATIC (.SVG)
+            </button>
           </div>
+
+          <!-- Active Viewer Display -->
+          <div class="bg-black rounded-xl overflow-hidden border border-surface-800 relative aspect-video flex items-center justify-center">
+            ${modalMode === 'video' ? `
+              <video controls autoplay class="w-full h-full object-contain" src="${videoSrc}"></video>
+            ` : modalMode === 'frame' ? `
+              <img src="${pngSrc}" class="w-full h-full object-cover" />
+            ` : `
+              <img src="${svgSrc}" class="w-full h-full object-contain p-4" />
+            `}
+          </div>
+
           <div class="bg-surface-950 p-4 rounded-xl border border-surface-800 text-xs space-y-1.5">
-            <span class="text-crimson font-mono font-bold block">NARRATION VOICE-OVER (${s.duration_sec || 18}s):</span>
+            <div class="flex justify-between items-center">
+              <span class="text-crimson font-mono font-bold block">NARRATION VOICE-OVER (${s.duration_sec || 18}s):</span>
+              <span class="text-[10px] font-mono text-zinc-500">SOUND: ${s.sound_design || 'Atmospheric Drone'}</span>
+            </div>
             <p class="text-zinc-200 text-sm leading-relaxed">"${s.narration_chunk || ''}"</p>
           </div>
         </div>
@@ -469,7 +520,53 @@
               </div>
             ` : ''}
 
-            <!-- Command Center Hero -->
+            <!-- AI Swarm War Room Strip (Visible Directly on Dashboard) -->
+            <div class="bg-surface-950 border border-surface-800 rounded-2xl p-5 border-glow">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-crimson ${isRunning ? 'animate-ping' : ''}"></span>
+                  <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">AI SWARM STATUS MATRIX</span>
+                </div>
+                <span class="text-[10px] font-mono text-zinc-400">8 NEURAL WORKERS ENGAGED</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
+                ${AI_AGENTS.map(agent => {
+                  const isActive = isRunning && (currentStageIdx >= agent.stageRange[0] && currentStageIdx <= agent.stageRange[1]);
+                  const isDone = currentStageIdx > agent.stageRange[1] || prog.status === "awaiting_approval" || prog.status === "completed";
+
+                  return `
+                    <div class="p-2.5 rounded-xl border text-center transition-all ${
+                      isActive 
+                        ? 'bg-surface-900 border-crimson glow-red' 
+                        : isDone 
+                        ? 'bg-surface-950 border-surface-800' 
+                        : 'bg-surface-950/40 border-surface-850 opacity-40'
+                    }">
+                      <div class="w-8 h-8 rounded-lg mx-auto flex items-center justify-center mb-1.5 ${isActive ? 'bg-red-600 text-white' : isDone ? 'bg-surface-800 text-white' : 'bg-surface-900 text-zinc-600'}">
+                        <i data-lucide="${agent.icon}" class="w-4 h-4"></i>
+                      </div>
+                      <div class="text-[10px] font-bold text-white font-mono truncate">${agent.name.split(' ')[0]}</div>
+                      <div class="text-[8px] text-zinc-500 font-sans truncate">${agent.role}</div>
+                      <div class="mt-2 pt-1 border-t border-surface-850 flex items-center justify-center">
+                        ${isActive ? `
+                          <div class="flex items-end gap-0.5 h-3">
+                            <span class="w-0.5 bg-crimson eq-1"></span>
+                            <span class="w-0.5 bg-crimson eq-2"></span>
+                            <span class="w-0.5 bg-crimson eq-3"></span>
+                          </div>
+                        ` : isDone ? `
+                          <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                        ` : `
+                          <span class="text-[8px] text-zinc-600">IDLE</span>
+                        `}
+                      </div>
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+
+            <!-- Command Center Hero & Quick Preset Pills -->
             <div class="bg-surface-950 border border-surface-800 rounded-2xl p-6 relative overflow-hidden border-glow">
               <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div class="space-y-2">
@@ -477,9 +574,9 @@
                     <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-600 text-white">AUTONOMOUS ENGINE</span>
                     <span class="text-xs font-mono text-zinc-500">CHANNEL: THE HIDDEN SYSTEMS</span>
                   </div>
-                  <h2 class="text-2xl font-black text-white tracking-tight">Instant 1-Click Documentary Engine</h2>
+                  <h2 class="text-2xl font-black text-white tracking-tight">Autonomous Documentary Production Studio</h2>
                   <p class="text-xs text-zinc-400 max-w-2xl font-sans">
-                    Multi-threaded parallel architecture. Generates 40 custom editorial vector scenes, 5-act retention scripts, 1080p camera motion, and a YouTube-ready release package in ~60 seconds.
+                    Parallel multi-agent architecture. Generates 40 custom editorial vector scenes, dynamic 8-act retention scripts, 1080p camera motion, and a YouTube-ready release package in ~60 seconds.
                   </p>
                 </div>
                 <div class="flex items-center gap-3 shrink-0">
@@ -494,28 +591,57 @@
                 </div>
               </div>
 
-              <!-- Custom Topic Quick Producer -->
-              <div class="mt-6 pt-5 border-t border-surface-800 flex items-center gap-3">
-                <input id="quick-input" type="text" placeholder="Type any topic (e.g. 'What If All Satellites Collapsed In A Kessler Syndrome Cascade?')..." class="flex-1 bg-surface-900 border border-surface-800 rounded-lg px-4 py-2.5 text-xs font-sans text-white focus:outline-none focus:border-red-600" />
-                <button onclick="const t = document.getElementById('quick-input').value; if(t) buildTopic(t); else showToast('Enter a topic first.');" class="px-4 py-2.5 rounded-lg bg-surface-850 hover:bg-surface-800 border border-surface-700 text-crimson font-mono font-bold text-xs">
-                  BUILD THIS TOPIC
-                </button>
+              <!-- Quick Topic Input & Fast Dispatch Pills -->
+              <div class="mt-6 pt-5 border-t border-surface-800 space-y-3">
+                <div class="flex items-center gap-3">
+                  <input id="quick-input" type="text" placeholder="Type any topic (e.g. 'What If All Satellites Collapsed In A Kessler Syndrome Cascade?')..." class="flex-1 bg-surface-900 border border-surface-800 rounded-lg px-4 py-2.5 text-xs font-sans text-white focus:outline-none focus:border-red-600" />
+                  <button onclick="const t = document.getElementById('quick-input').value; if(t) buildTopic(t); else showToast('Enter a topic first.');" class="px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-mono font-bold text-xs glow-red transition">
+                    BUILD THIS TOPIC
+                  </button>
+                </div>
+                <!-- Quick Topic Preset Pills -->
+                <div class="flex flex-wrap items-center gap-2 text-[10px] font-mono">
+                  <span class="text-zinc-500 uppercase">QUICK LAUNCH:</span>
+                  <button onclick="buildTopic('The 14 People Who Hold The Physical Keys To The Internet')" class="px-2.5 py-1 rounded-full bg-surface-900 hover:bg-surface-850 border border-surface-800 hover:border-crimson text-zinc-300 hover:text-white transition">
+                    The 14 Keyholders
+                  </button>
+                  <button onclick="buildTopic('What If Quantum Computers Broke RSA Tomorrow Morning?')" class="px-2.5 py-1 rounded-full bg-surface-900 hover:bg-surface-850 border border-surface-800 hover:border-crimson text-zinc-300 hover:text-white transition">
+                    Quantum RSA Break
+                  </button>
+                  <button onclick="buildTopic('What If The Entire Internet Disappeared For 24 Hours?')" class="px-2.5 py-1 rounded-full bg-surface-900 hover:bg-surface-850 border border-surface-800 hover:border-crimson text-zinc-300 hover:text-white transition">
+                    24H Internet Blackout
+                  </button>
+                  <button onclick="buildTopic('The BGP Hijacking Of YouTube: Pakistan Telecom Black Hole')" class="px-2.5 py-1 rounded-full bg-surface-900 hover:bg-surface-850 border border-surface-800 hover:border-crimson text-zinc-300 hover:text-white transition">
+                    BGP Hijack
+                  </button>
+                  <button onclick="buildTopic('The Lost Spacecraft Code: Apollo 11 Luminary 1A Flight Software')" class="px-2.5 py-1 rounded-full bg-surface-900 hover:bg-surface-850 border border-surface-800 hover:border-crimson text-zinc-300 hover:text-white transition">
+                    Apollo 11 AGC Code
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- Master Video Monitor Card -->
             <div class="bg-surface-950 border border-surface-800 rounded-2xl p-5 border-glow">
-              <div class="flex items-center justify-between mb-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                 <span class="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
                   <span class="w-2 h-2 rounded-full bg-crimson animate-pulse"></span>
                   LATEST FINISHED DOCUMENTARY MASTER
                 </span>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <button onclick="openProjectFolder()" class="px-3 py-1 bg-surface-900 hover:bg-surface-850 border border-surface-800 text-[11px] font-mono rounded text-zinc-300 flex items-center gap-1.5">
+                    <i data-lucide="folder" class="w-3.5 h-3.5"></i>
+                    <span>OPEN IN EXPLORER</span>
+                  </button>
+                  <button onclick="copyFullYouTubePackage()" class="px-3 py-1 bg-surface-900 hover:bg-surface-850 border border-surface-800 text-[11px] font-mono rounded text-zinc-300 flex items-center gap-1.5">
+                    <i data-lucide="copy" class="w-3.5 h-3.5 text-crimson"></i>
+                    <span>COPY ALL YOUTUBE DATA</span>
+                  </button>
                   <a href="/media/${p.date_folder}/${p.topic_slug}/video/final_1080p.mp4" download class="px-3 py-1 bg-surface-900 hover:bg-surface-850 border border-surface-800 text-[11px] font-mono rounded text-zinc-300">
                     DOWNLOAD 1080P
                   </a>
                   <a href="/api/productions/${p.id}/export-zip" class="px-3.5 py-1 bg-red-600 hover:bg-red-500 text-white font-mono font-bold text-[11px] rounded glow-red">
-                    DOWNLOAD .ZIP PACKAGE
+                    DOWNLOAD .ZIP
                   </a>
                 </div>
               </div>
@@ -524,18 +650,19 @@
                 <video id="master-vid" controls class="w-full h-full" src="/media/${p.date_folder}/${p.topic_slug}/video/preview_720p.mp4" poster="/media/${p.date_folder}/${p.topic_slug}/thumbnails/thumbnail_1.png"></video>
               </div>
 
+              <!-- Interactive Chapter Scrubbers -->
               <div class="flex flex-wrap gap-2 pt-2 border-t border-surface-800/80">
                 ${(meta.chapters || [
-                  { time: "00:00", title: "Silence at 00:00", sec: 0 },
-                  { time: "01:45", title: "Hour 1: Signaling Storm", sec: 105 },
-                  { time: "03:30", title: "Hour 3: Ghost Register", sec: 210 },
-                  { time: "05:15", title: "Hour 6: Giants of Commerce", sec: 315 },
-                  { time: "07:05", title: "Hour 12: Grid Islanding", sec: 425 },
-                  { time: "08:50", title: "Hour 18: Analog Renaissance", sec: 530 },
-                  { time: "10:35", title: "Hour 24: Thundering Herd", sec: 635 },
-                  { time: "12:15", title: "Conclusion: Fragility", sec: 735 }
-                ]).map(c => `
-                  <button onclick="document.getElementById('master-vid').currentTime = ${c.sec}; document.getElementById('master-vid').play();" class="px-2.5 py-1 rounded bg-surface-900 hover:bg-surface-850 border border-surface-800 text-[11px] font-mono text-zinc-300">
+                  { time: "00:00", title: "Act 1: The Inciting Incident", sec: 0 },
+                  { time: "01:45", title: "Act 2: The Cascading Failure", sec: 105 },
+                  { time: "03:30", title: "Act 3: The Architecture Exposed", sec: 210 },
+                  { time: "05:15", title: "Act 4: The Critical Threshold", sec: 315 },
+                  { time: "07:05", title: "Act 5: The Human Mechanism", sec: 425 },
+                  { time: "08:50", title: "Act 6: The Unseen Countermeasure", sec: 530 },
+                  { time: "10:35", title: "Act 7: The Recovery Horizon", sec: 635 },
+                  { time: "12:15", title: "Act 8: The Systemic Verdict", sec: 735 }
+                ]).map((c, i) => `
+                  <button onclick="document.getElementById('master-vid').currentTime = ${c.sec || i * 90}; document.getElementById('master-vid').play();" class="px-2.5 py-1 rounded bg-surface-900 hover:bg-surface-850 border border-surface-800 text-[11px] font-mono text-zinc-300 hover:text-white transition">
                     <span class="text-crimson font-bold">${c.time}</span> ${c.title}
                   </button>
                 `).join("")}
@@ -554,7 +681,7 @@
               </div>
               <div class="bg-surface-950 border border-surface-800 rounded-xl p-4">
                 <span class="text-[10px] font-mono text-zinc-500 block">QUALITY GATE</span>
-                <span class="text-lg font-bold text-white font-mono mt-1 block">${p.review_score || 94} / 100</span>
+                <span class="text-lg font-bold text-white font-mono mt-1 block">${p.review_score || 93} / 100</span>
               </div>
               <div class="bg-surface-950 border border-surface-800 rounded-xl p-4">
                 <span class="text-[10px] font-mono text-zinc-500 block">ENGINE STATUS</span>
@@ -673,6 +800,10 @@
                 <p class="text-xs text-zinc-400 font-mono mt-0.5">Broadcast-grade 1080p MP4 master with YouTube metadata package.</p>
               </div>
               <div class="flex items-center gap-2">
+                <button onclick="openProjectFolder()" class="px-3 py-1.5 rounded bg-surface-850 hover:bg-surface-800 border border-surface-700 text-xs font-mono text-zinc-300 flex items-center gap-1.5">
+                  <i data-lucide="folder" class="w-3.5 h-3.5"></i>
+                  <span>EXPLORER</span>
+                </button>
                 <a href="/media/${p.date_folder}/${p.topic_slug}/video/final_1080p.mp4" download class="px-3 py-1.5 rounded bg-surface-850 hover:bg-surface-800 border border-surface-700 text-xs font-mono text-white">
                   DOWNLOAD 1080P MASTER
                 </a>
@@ -690,13 +821,13 @@
 
               <!-- Metadata 1-Click Copy Bar -->
               <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-surface-800 text-xs font-mono">
-                <button onclick="copyToClipboard('${(meta.final_title || p.topic_title).replace(/'/g, "\'")}', 'Title')" class="p-3 bg-surface-900 hover:bg-surface-850 rounded-xl border border-surface-800 text-left">
+                <button onclick="copyToClipboard('${(meta.final_title || p.topic_title || '').replace(/'/g, "\\'")}', 'Title')" class="p-3 bg-surface-900 hover:bg-surface-850 rounded-xl border border-surface-800 text-left">
                   <span class="text-zinc-500 block text-[10px]">YOUTUBE TITLE</span>
                   <span class="text-white font-bold block truncate mt-1">${meta.final_title || p.topic_title}</span>
                 </button>
-                <button onclick="copyToClipboard(\`${(meta.description || '').replace(/`/g, '\`')}\`, 'Description')" class="p-3 bg-surface-900 hover:bg-surface-850 rounded-xl border border-surface-800 text-left">
-                  <span class="text-zinc-500 block text-[10px]">DESCRIPTION & CHAPTERS</span>
-                  <span class="text-crimson font-bold block mt-1">CLICK TO COPY FULL TEXT</span>
+                <button onclick="copyFullYouTubePackage()" class="p-3 bg-surface-900 hover:bg-surface-850 rounded-xl border border-surface-800 text-left">
+                  <span class="text-zinc-500 block text-[10px]">FULL YOUTUBE PACKAGE</span>
+                  <span class="text-crimson font-bold block mt-1">CLICK TO COPY ALL (TITLE+DESC+TAGS)</span>
                 </button>
                 <button onclick="copyToClipboard('${(meta.tags || []).join(', ')}', 'SEO Tags')" class="p-3 bg-surface-900 hover:bg-surface-850 rounded-xl border border-surface-800 text-left">
                   <span class="text-zinc-500 block text-[10px]">SEO TAGS (COMMA SEPARATED)</span>
@@ -728,7 +859,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <h2 class="text-xl font-black text-white uppercase tracking-wider font-mono">40-SCENE STORYBOARD</h2>
-                <p class="text-xs text-zinc-400 font-mono mt-0.5">Click any scene card to open high-resolution Lightbox view.</p>
+                <p class="text-xs text-zinc-400 font-mono mt-0.5">Click any scene card to preview its animated MP4 video, 1080p frame, or vector SVG.</p>
               </div>
               <span class="text-xs font-mono text-crimson font-bold">40 SCENES GENERATED</span>
             </div>
@@ -746,12 +877,17 @@
                       <div class="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-red-600/90 text-[9px] font-mono text-white font-bold">
                         ${s.duration_sec}s
                       </div>
+                      <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                        <div class="w-10 h-10 rounded-full bg-red-600/90 flex items-center justify-center text-white glow-red">
+                          <i data-lucide="play" class="w-4 h-4 fill-white ml-0.5"></i>
+                        </div>
+                      </div>
                     </div>
                     <div class="p-3 space-y-1">
                       <p class="text-xs text-zinc-300 font-sans line-clamp-2">${s.narration_chunk}</p>
                       <div class="text-[10px] font-mono text-crimson pt-1 flex items-center justify-between border-t border-surface-900">
                         <span>${s.camera_movement}</span>
-                        <span class="text-zinc-500">INSPECT</span>
+                        <span class="text-zinc-500">PLAY ▶</span>
                       </div>
                     </div>
                   </div>
@@ -788,7 +924,7 @@
                       </td>
                       <td class="py-3 px-4 text-zinc-400">${t.niche}</td>
                       <td class="py-3 px-4 text-right">
-                        <button onclick="buildTopic('${t.title.replace(/'/g, "\'")}')" class="px-3 py-1 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-xs glow-red transition">
+                        <button onclick="buildTopic('${t.title.replace(/'/g, "\\'")}')" class="px-3 py-1 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-xs glow-red transition">
                           PRODUCE NOW
                         </button>
                       </td>
@@ -824,9 +960,9 @@
                   <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
                     <div class="flex justify-between items-center">
                       <span class="text-xs font-bold text-crimson">ACT ${act.act_number}: ${act.title}</span>
-                      <span class="text-[10px] text-zinc-500">~${act.target_duration_sec}s</span>
+                      <span class="text-[10px] text-zinc-500">~${act.target_duration_sec || 90}s</span>
                     </div>
-                    <p class="text-xs text-zinc-300 font-sans leading-relaxed whitespace-pre-wrap">${act.narration_text || ""}</p>
+                    <p class="text-xs text-zinc-300 font-sans leading-relaxed whitespace-pre-wrap">${act.narration_text || act.narration || ""}</p>
                   </div>
                 `).join("")}
               </div>

@@ -141,7 +141,7 @@ export default makeScene2D(function* (view) {
             "-y",
             "-loop", "1",
             "-i", str(render_input),
-            "-vf", f"{vf},format=yuv420p",
+            "-vf", f"{vf},eq=contrast=1.06:brightness=0.01:saturation=1.12,format=yuv420p",
             "-t", f"{dur:.2f}",
             "-r", str(settings.video_fps),
             "-c:v", "libx264",
